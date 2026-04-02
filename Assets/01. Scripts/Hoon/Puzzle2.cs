@@ -6,6 +6,11 @@ public class Puzzle2 : MonoBehaviour
     public Color onColor = Color.green;
     public Color offColor = new Color(0.5f, 0.5f, 0.5f);
 
+    [Header("해당 레벨 최소 클릭 횟수 설정")]
+    public int maxClickTimes;
+
+    public int curClickTimes;
+
     private Puzzle2Node[] allNodes; // 클리어 체크용으로만 씀
 
     private bool isCleared = false;
@@ -31,13 +36,30 @@ public class Puzzle2 : MonoBehaviour
             }
         }
 
+        // 클릭 횟수 추가 및 텍스트 업데이트.
+        curClickTimes++;
+        Puzzle2Manager.instance.UpdateClickText(this);
+
+
         // 모든 노드가 on인지 확인 후 하나라도 off라면 return.
+        bool isClear = true;
         foreach (var node in allNodes)
         {
             if (!node.isOn)
-                return;
+                isClear = false;
         }
-        Clear();
+
+        if (isClear)
+        {
+            Clear();
+            return;
+        }
+
+        // 클릭 횟수 다 소모했는데 클리어 못했다면 리셋.
+        if (curClickTimes >= maxClickTimes)
+        {
+            Reset();
+        }
     }
 
     // 해당 레벨 클리어 시 (모든 노드가 IsOn상태가 될 때) 호출.
@@ -45,11 +67,11 @@ public class Puzzle2 : MonoBehaviour
     {
         if (isCleared) return;
         isCleared = true;
-        Debug.Log("퍼즐 클리어. 다음 레벨 호출 시도.");
+        Debug.Log("해당 레벨 클리어. 다음 레벨 호출 시도.");
         Puzzle2Manager.instance.ActivateNextPuzzle2();
     }
 
-    // 해당 레벨의 노드 전부 꺼지는 리셋. Puzzle2Manager가 호출해줌.
+    // 해당 레벨의 노드 전부 꺼지는 리셋.
     public void Reset()
     {
         foreach (Puzzle2Node node in allNodes)
@@ -57,5 +79,8 @@ public class Puzzle2 : MonoBehaviour
             node.isOn = false;
             node.UpdateVisual();
         }
+        curClickTimes = 0;
+        Puzzle2Manager.instance.UpdateClickText(this);
+        Debug.Log("퍼즐 리셋!");
     }
 }
