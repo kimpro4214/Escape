@@ -40,12 +40,22 @@ public class Puzzle2 : MonoBehaviour
         Clear();
     }
 
-    // 해당 퍼즐 클리어 시 (모든 노드가 IsOn상태가 될 때) 호출.
+    // 해당 레벨 클리어 시 (모든 노드가 IsOn상태가 될 때) 호출.
     protected void Clear()
     {
         if (isCleared) return;
         isCleared = true;
         Debug.Log("퍼즐 클리어. 다음 레벨 호출 시도.");
         Puzzle2Manager.instance.ActivateNextPuzzle2();
+    }
+
+    // 해당 레벨의 노드 전부 꺼지는 리셋. Puzzle2Manager가 호출해줌.
+    public void Reset()
+    {
+        foreach (Puzzle2Node node in allNodes)
+        {
+            node.isOn = false;
+            node.UpdateVisual();
+        }
     }
 }

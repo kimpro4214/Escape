@@ -10,7 +10,7 @@ public class Puzzle2Node : MonoBehaviour
     private MeshRenderer _renderer;
     private MaterialPropertyBlock _propBlock;
 
-    public bool isOn { get; private set; } = false;
+    public bool isOn = false;
 
     void Awake()
     {
@@ -38,7 +38,7 @@ public class Puzzle2Node : MonoBehaviour
     }
 
     // 활성화 여부에 따라 색상 변경 (onColor < - > offColor)
-    private void UpdateVisual()
+    public void UpdateVisual()
     {
         if (_renderer != null && _manager != null)
         {
