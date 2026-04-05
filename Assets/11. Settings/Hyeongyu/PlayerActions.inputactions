@@ -1,0 +1,26 @@
+﻿{
+  "name": "PlayerActions",
+  "maps": [
+    {
+      "name": "Player",
+      "id": "63568ca9-1295-4d8e-9b3c-09bfaad00147",
+      "actions": [
+        {"name": "Move",     "type": "Value",  "id": "515bf228-7f87-4d71-9101-4a9e274aa101", "expectedControlType": "Vector2", "processors": "", "interactions": "", "initialStateCheck": true},
+        {"name": "Look",     "type": "Value",  "id": "bdfd96cf-2b18-4ab3-b3f1-7bf80f35e17d", "expectedControlType": "Vector2", "processors": "", "interactions": "", "initialStateCheck": false},
+        {"name": "Interact", "type": "Button", "id": "7b6815ca-3c55-46b8-b83e-712d5cb4eb91",  "expectedControlType": "Button",  "processors": "", "interactions": "", "initialStateCheck": false},
+        {"name": "Jump",     "type": "Button", "id": "a2f3e451-8c12-4f9a-b7d6-3e5c9f0d1a2b",  "expectedControlType": "Button",  "processors": "", "interactions": "", "initialStateCheck": false}
+      ],
+      "bindings": [
+        {"name": "WASD",  "id": "41e588e5-b931-4d63-b152-a9e40f76ba5e",  "path": "2DVector",       "interactions": "", "processors": "", "groups": "", "action": "Move",     "isComposite": true,  "isPartOfComposite": false},
+        {"name": "up",    "id": "309090cb-63b0-40e0-9a5a-275ac8788e50",    "path": "<Keyboard>/w", "interactions": "", "processors": "", "groups": "", "action": "Move",     "isComposite": false, "isPartOfComposite": true},
+        {"name": "down",  "id": "e4f4d623-9785-4b4c-bf30-5a5d7a5a3d70",    "path": "<Keyboard>/s", "interactions": "", "processors": "", "groups": "", "action": "Move",     "isComposite": false, "isPartOfComposite": true},
+        {"name": "left",  "id": "4b1a064d-3f56-4a7a-a798-57b14107c1bf",    "path": "<Keyboard>/a", "interactions": "", "processors": "", "groups": "", "action": "Move",     "isComposite": false, "isPartOfComposite": true},
+        {"name": "right", "id": "4739c923-6d8b-42f1-b0d4-5f4c5b58e010",    "path": "<Keyboard>/d", "interactions": "", "processors": "", "groups": "", "action": "Move",     "isComposite": false, "isPartOfComposite": true},
+        {"name": "",      "id": "8522cddf-6ac9-40e1-9d6d-e80742900585", "path": "<Mouse>/delta",  "interactions": "", "processors": "", "groups": "", "action": "Look",     "isComposite": false, "isPartOfComposite": false},
+        {"name": "",      "id": "01a733c3-36ca-48c8-825e-93c2736fdd7c",  "path": "<Keyboard>/f",     "interactions": "", "processors": "", "groups": "", "action": "Interact", "isComposite": false, "isPartOfComposite": false},
+        {"name": "",      "id": "c4d7b892-1e23-4a56-9f0c-7b8d2e3f4a5c",  "path": "<Keyboard>/space", "interactions": "", "processors": "", "groups": "", "action": "Jump",     "isComposite": false, "isPartOfComposite": false}
+      ]
+    }
+  ],
+  "controlSchemes": []
+}
