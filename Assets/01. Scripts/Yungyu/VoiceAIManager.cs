@@ -18,7 +18,10 @@ public class VoiceAIManager : MonoBehaviour
     private bool isRecording = false;
 
     [Header("대화 기록 UI")]
-    [SerializeField] private ChatLogManager chatLogManager; // 인스펙터에서 연결!
+    [SerializeField] private ChatLogManager chatLogManager;
+
+    [Header("자막 UI")]
+    [SerializeField] private SubtitleManager subtitleManager;
 
     private void Update()
     {
@@ -66,7 +69,9 @@ public class VoiceAIManager : MonoBehaviour
     {
         if (isProcessing) return;
 
+        
         chatLogManager.AddLog("AI", scenarios[currentScenarioIdx].openingText);
+        subtitleManager.ShowSubtitle("AI", scenarios[currentScenarioIdx].openingText);
 
         _ = supertoneTTS.Speak(scenarios[currentScenarioIdx].openingText);
     }
@@ -87,6 +92,7 @@ public class VoiceAIManager : MonoBehaviour
 
             // 플레이어의 음성 인식 결과를 로그에 추가!
             chatLogManager.AddLog("플레이어", playerText);
+            subtitleManager.ShowSubtitle("플레이어", playerText);
 
             Scenario current = scenarios[currentScenarioIdx];
 
@@ -110,6 +116,7 @@ public class VoiceAIManager : MonoBehaviour
 
                 // 힌트 메시지 로그에 추가!
                 chatLogManager.AddLog("힌트", hint);
+                subtitleManager.ShowSubtitle("힌트", hint);
 
                 await supertoneTTS.Speak(hint);
                 return;
@@ -120,6 +127,7 @@ public class VoiceAIManager : MonoBehaviour
 
             // GPT의 대답을 로그에 추가!
             chatLogManager.AddLog("AI", gptResponse);
+            subtitleManager.ShowSubtitle("AI", gptResponse);
 
             await supertoneTTS.Speak(gptResponse);
         }

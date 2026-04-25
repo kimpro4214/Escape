@@ -28,6 +28,12 @@ public class ScreenHintService : MonoBehaviour
     [Header("상태")]
     [SerializeField] private bool isProcessing = false;
 
+    [Header("대화 기록 UI")]
+    [SerializeField] private ChatLogManager chatLogManager;
+
+    [Header("자막 UI")]
+    [SerializeField] private SubtitleManager subtitleManager;
+
     // ─────────────────────────────────────────────
     // 키보드 단축키 (H키)
     // ─────────────────────────────────────────────
@@ -75,6 +81,9 @@ public class ScreenHintService : MonoBehaviour
         yield return new WaitUntil(() => visionTask.IsCompleted);
 
         string hintText = visionTask.Result;
+
+        chatLogManager.AddLog("AI", hintText);
+        subtitleManager.ShowSubtitle("AI", hintText);
 
         if (!string.IsNullOrEmpty(hintText))
         {
