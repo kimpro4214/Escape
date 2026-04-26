@@ -4,6 +4,6 @@ public class SolveNode : MonoBehaviour
 {
     private void OnMouseDown()
     {
-        Puzzle2Manager.instance.SolveMinimum();
+        GetComponentInParent<Puzzle2>().Solve();
     }
 }
