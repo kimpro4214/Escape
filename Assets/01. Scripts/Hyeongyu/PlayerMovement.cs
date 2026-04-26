@@ -6,6 +6,10 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float sprintSpeed = 7.5f;
+    [SerializeField] private float acceleration = 18f;
+    [SerializeField] private float deceleration = 22f;
+    [SerializeField, Range(0f, 1f)] private float airControl = 0.45f;
     [SerializeField] private float gravity = -20f;
     [SerializeField] private float groundedGravity = -2f;
 
@@ -15,18 +19,21 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Jump")]
     [SerializeField] private float jumpHeight = 1.5f;
+    [SerializeField] private float coyoteTime = 0.12f;
+    [SerializeField] private float jumpBufferTime = 0.12f;
 
     [Header("Input")]
     [SerializeField] private InputActionReference moveAction;
     [SerializeField] private InputActionReference jumpAction;
+    [SerializeField] private InputActionReference sprintAction;
 
     private CharacterController _controller;
-    private Vector3 _velocity;
+    private Vector3 _horizontalVelocity;
+    private float _verticalVelocity;
     private Vector2 _inputDir;
+    private float _lastGroundedTime = float.NegativeInfinity;
+    private float _lastJumpPressedTime = float.NegativeInfinity;
 
-    /// <summary>
-    /// CharacterController를 초기화하고 stepOffset, slopeLimit을 인스펙터 값으로 설정한다.
-    /// </summary>
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
@@ -34,78 +41,103 @@ public class PlayerMovement : MonoBehaviour
         _controller.slopeLimit = slopeLimit;
     }
 
-    /// <summary>
-    /// 이동 및 점프 Input Action을 활성화하고 점프 이벤트 리스너를 등록한다.
-    /// </summary>
     private void OnEnable()
     {
         moveAction?.action.Enable();
         jumpAction?.action.Enable();
+        sprintAction?.action.Enable();
+
         if (jumpAction != null)
             jumpAction.action.performed += OnJumpPerformed;
     }
 
-    /// <summary>
-    /// 이동 및 점프 Input Action을 비활성화하고 점프 이벤트 리스너를 해제한다.
-    /// </summary>
     private void OnDisable()
     {
-        moveAction?.action.Disable();
-        jumpAction?.action.Disable();
         if (jumpAction != null)
             jumpAction.action.performed -= OnJumpPerformed;
+
+        moveAction?.action.Disable();
+        jumpAction?.action.Disable();
+        sprintAction?.action.Disable();
     }
 
-    /// <summary>
-    /// 점프 입력 발생 시 지면 상태를 확인하고 수직 속도를 계산해 점프를 실행한다.
-    /// </summary>
-    /// <param name="ctx">Input System 콜백 컨텍스트.</param>
-    private void OnJumpPerformed(InputAction.CallbackContext ctx)
-    {
-        if (_controller.isGrounded)
-            _velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-    }
-
-    /// <summary>
-    /// 매 프레임 이동 입력 값을 읽어 _inputDir에 저장한다.
-    /// </summary>
     private void Update()
     {
-        _inputDir = moveAction != null ? moveAction.action.ReadValue<Vector2>() : Vector2.zero;
-    }
-
-    /// <summary>
-    /// 물리 주기마다 이동과 중력을 순서대로 적용한다.
-    /// </summary>
-    private void FixedUpdate()
-    {
-        ApplyMovement();
+        ReadInput();
+        UpdateGroundedState();
+        ApplyJump();
         ApplyGravity();
+        ApplyMovement();
     }
 
-    /// <summary>
-    /// 입력 방향을 기반으로 CharacterController를 수평 이동시킨다.
-    /// </summary>
-    private void ApplyMovement()
+    private void OnJumpPerformed(InputAction.CallbackContext ctx)
     {
-        Vector3 move = transform.right * _inputDir.x + transform.forward * _inputDir.y;
-        _controller.Move(move * moveSpeed * Time.fixedDeltaTime);
+        _lastJumpPressedTime = Time.time;
     }
 
-    /// <summary>
-    /// 지면 여부에 따라 중력을 누적하거나 초기화하고, 수직 속도를 적용한다.
-    /// </summary>
+    private void ReadInput()
+    {
+        Vector2 rawInput = moveAction != null ? moveAction.action.ReadValue<Vector2>() : Vector2.zero;
+        _inputDir = Vector2.ClampMagnitude(rawInput, 1f);
+    }
+
+    private void UpdateGroundedState()
+    {
+        if (_controller.isGrounded)
+            _lastGroundedTime = Time.time;
+    }
+
+    private void ApplyJump()
+    {
+        bool canUseCoyoteTime = Time.time - _lastGroundedTime <= coyoteTime;
+        bool hasBufferedJump = Time.time - _lastJumpPressedTime <= jumpBufferTime;
+
+        if (!canUseCoyoteTime || !hasBufferedJump)
+            return;
+
+        _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        _lastJumpPressedTime = float.NegativeInfinity;
+        _lastGroundedTime = float.NegativeInfinity;
+    }
+
     private void ApplyGravity()
     {
         if (_controller.isGrounded)
         {
-            _velocity.y = groundedGravity;
+            if (_verticalVelocity < 0f)
+                _verticalVelocity = groundedGravity;
         }
         else
         {
-            _velocity.y += gravity * Time.fixedDeltaTime;
+            _verticalVelocity += gravity * Time.deltaTime;
         }
+    }
 
-        _controller.Move(_velocity * Time.fixedDeltaTime);
+    private void ApplyMovement()
+    {
+        Vector3 targetDirection = transform.right * _inputDir.x + transform.forward * _inputDir.y;
+        float targetSpeed = IsSprinting() ? sprintSpeed : moveSpeed;
+        Vector3 targetVelocity = targetDirection * targetSpeed;
+
+        float controlMultiplier = _controller.isGrounded ? 1f : airControl;
+        float speedChange = (_inputDir.sqrMagnitude > 0.01f ? acceleration : deceleration) * controlMultiplier;
+
+        _horizontalVelocity = Vector3.MoveTowards(
+            _horizontalVelocity,
+            targetVelocity,
+            speedChange * Time.deltaTime
+        );
+
+        Vector3 motion = _horizontalVelocity;
+        motion.y = _verticalVelocity;
+        CollisionFlags collisionFlags = _controller.Move(motion * Time.deltaTime);
+
+        if ((collisionFlags & CollisionFlags.Above) != 0 && _verticalVelocity > 0f)
+            _verticalVelocity = 0f;
+    }
+
+    private bool IsSprinting()
+    {
+        return sprintAction != null && sprintAction.action.IsPressed();
     }
 }
