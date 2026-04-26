@@ -60,7 +60,6 @@ public class SupertoneTTS : MonoBehaviour
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
 
-            // 2. 범인이었던 헤더 이름 수정 (x-sup-api-key)
             request.SetRequestHeader("Content-Type", "application/json");
             request.SetRequestHeader("x-sup-api-key", apiKeyConfig.supertoneKey);
 
