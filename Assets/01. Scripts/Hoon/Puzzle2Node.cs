@@ -6,17 +6,30 @@ public class Puzzle2Node : MonoBehaviour
     [Header("이웃 노드 연결")]
     public List<Puzzle2Node> neighbors;
 
+    [Header("호버 효과")]
+    public float hoverScale = 1.2f;
+    public float hoverDuration = 0.15f;
+
     private Puzzle2 _manager;
     private MeshRenderer _renderer;
     private MaterialPropertyBlock _propBlock;
 
     public bool isOn = false;
 
+    private Vector3 _baseScale;
+    private Vector3 _targetScale;
+    private Vector3 _fromScale;
+    private float _lerpT;
+    private bool _isLerping;
+
     void Awake()
     {
         _renderer = GetComponent<MeshRenderer>();
-        _manager = FindAnyObjectByType<Puzzle2>(); // 매니저 자동 찾기
+        _manager = FindAnyObjectByType<Puzzle2>();
         _propBlock = new MaterialPropertyBlock();
+        _baseScale = transform.localScale;
+        _targetScale = _baseScale;
+        _fromScale = _baseScale;
     }
 
     void Start()
@@ -24,20 +37,49 @@ public class Puzzle2Node : MonoBehaviour
         UpdateVisual();
     }
 
-    // 상호작용 시 호출. 임시로 버튼 클릭으로 했지만 상호작용 가능한 오브젝트 인터페이스 구현 함수로 바꾸면 됨.
+    void Update()
+    {
+        if (!_isLerping) return;
+
+        _lerpT += Time.deltaTime / hoverDuration;
+        transform.localScale = Vector3.Lerp(_fromScale, _targetScale, _lerpT);
+
+        if (_lerpT >= 1f)
+        {
+            transform.localScale = _targetScale;
+            _isLerping = false;
+        }
+    }
+
+    private void OnMouseEnter()
+    {
+        SetTargetScale(_baseScale * hoverScale);
+    }
+
+    private void OnMouseExit()
+    {
+        SetTargetScale(_baseScale);
+    }
+
+    private void SetTargetScale(Vector3 target)
+    {
+        _fromScale = transform.localScale;
+        _targetScale = target;
+        _lerpT = 0f;
+        _isLerping = true;
+    }
+
     private void OnMouseDown()
     {
         GetComponentInParent<Puzzle2>().HandleNodeClick(this);
     }
 
-    // 노드 상태 반전
     public void Toggle()
     {
         isOn = !isOn;
         UpdateVisual();
     }
 
-    // 활성화 여부에 따라 색상 변경 (onColor < - > offColor)
     public void UpdateVisual()
     {
         if (_renderer != null && _manager != null)

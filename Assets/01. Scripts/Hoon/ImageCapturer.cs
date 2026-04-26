@@ -1,61 +1,80 @@
-using System.IO;
+ï»¿using System.IO;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class ImageCapturer : MonoBehaviour
 {
-    [Header("¼³Á¤")]
-    public Camera targetCamera; // ÀÌ¹ÌÁö¸¦ »ÌÀ» Ä«¸Ş¶ó
-    public int resWidth = 512;  // LLMÀº 512~1024¸é ÃæºĞÇÕ´Ï´Ù (¿ë·® Àı¾à)
+    [Header("í•µì‹¬ ëŒ€ìƒ ì„¤ì •")]
+    public Camera targetCamera;
+
+    [Tooltip("í¼ì¦ ì˜¤ë¸Œì íŠ¸ë“¤ì´ ì†í•œ ë ˆì´ì–´ë¥¼ ì„ íƒí•˜ì„¸ìš”.")]
+    public LayerMask puzzleLayer; // ìƒˆë¡œ ì¶”ê°€ëœ ë¶€ë¶„
+
+    [Header("í•´ìƒë„ ì„¤ì •")]
+    public int resWidth = 512;
     public int resHeight = 512;
 
-    [Header("ÀúÀå °æ·Î ¼³Á¤")]
-    [Tooltip("Assets Æú´õ ±âÁØ »ó´ë °æ·Î (¿¹: Captures/LLM)")]
+    [Header("ì €ì¥ ê²½ë¡œ ì„¤ì •")]
     public string folderName = "04. Data/Captures";
 
-    public void CaptureForLLM()
+    private void Start()
     {
-        string directoryPath = Path.Combine(Application.dataPath, folderName);
-        // 1. Ä«¸Ş¶ó°¡ ±×¸± °¡»ó Äµ¹ö½º(RenderTexture) »ı¼º
+        if (targetCamera == null) targetCamera = Camera.main;
+    }
+
+    public void CaptureOnlyPuzzle()
+    {
+        if (targetCamera == null) return;
+
+        // 1. ì¹´ë©”ë¼ ìƒíƒœ ë°±ì—… (ë§ˆìŠ¤í¬, ë°°ê²½ìƒ‰ ë“±)
+        int originalMask = targetCamera.cullingMask;
+        Color originalBG = targetCamera.backgroundColor;
+        CameraClearFlags originalFlags = targetCamera.clearFlags;
+
+        // 2. ì´¬ì˜ìš© í•„í„° ì„¸íŒ…
+        // íŠ¹ì • ë ˆì´ì–´ë§Œ ë³´ì´ê²Œ í•˜ê³ , ë‚˜ë¨¸ì§€ëŠ” ê²€ì€ìƒ‰(í˜¹ì€ íˆ¬ëª…)ìœ¼ë¡œ ë¹„ì›ë‹ˆë‹¤.
+        targetCamera.cullingMask = puzzleLayer;
+        targetCamera.clearFlags = CameraClearFlags.SolidColor;
+        targetCamera.backgroundColor = Color.black; // LLM ì¸ì‹ì„ ìœ„í•´ ê²€ì€ ë°°ê²½ ì¶”ì²œ
+
+        // --- ìº¡ì²˜ ë¡œì§ (ê¸°ì¡´ê³¼ ë™ì¼) ---
         RenderTexture rt = new RenderTexture(resWidth, resHeight, 24);
         targetCamera.targetTexture = rt;
-
-        // 2. ÅØ½ºÃ³ µ¥ÀÌÅÍ °ø°£ »ı¼º
         Texture2D screenShot = new Texture2D(resWidth, resHeight, TextureFormat.RGB24, false);
 
-        // 3. ·»´õ¸µ ¹× ÇÈ¼¿ ÀĞ±â
-        targetCamera.Render();
+        targetCamera.Render(); // ì´ ìˆœê°„ì—ë§Œ í¼ì¦ ë ˆì´ì–´ë§Œ ê·¸ë ¤ì§
+
         RenderTexture.active = rt;
         screenShot.ReadPixels(new Rect(0, 0, resWidth, resHeight), 0, 0);
         screenShot.Apply();
 
-        // 4. µŞÁ¤¸® (¸Ş¸ğ¸® ´©¼ö ¹æÁö ÇÙ½É)
+        // 3. ë’·ì •ë¦¬ (ì¹´ë©”ë¼ë¥¼ ì›ë˜ëŒ€ë¡œ ëŒë ¤ë†“ê¸°)
         targetCamera.targetTexture = null;
         RenderTexture.active = null;
-        Destroy(rt);
+        DestroyImmediate(rt);
 
-        // 5. ÆÄÀÏ »ı¼º. Ç°Áú 85% Á¤µµ·Î ¾ĞÃà
+        targetCamera.cullingMask = originalMask; // ì›ë˜ ë ˆì´ì–´ ì„¤ì • ë³µêµ¬
+        targetCamera.clearFlags = originalFlags;
+        targetCamera.backgroundColor = originalBG;
+
+        // 4. ì €ì¥
         byte[] bytes = screenShot.EncodeToJPG(85);
+        string directoryPath = Path.Combine(Application.dataPath, folderName);
+        if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
 
-        string fileName = $"LLM_Input_{System.DateTime.Now:yyyyMMdd_HHmmss}.jpg";
-
+        string fileName = "LLM_Input_Current.jpg";
         string fullPath = Path.Combine(directoryPath, fileName);
-
-        // 5. ÀúÀå ½ÇÇà (directoryPath ´ë½Å fullPath »ç¿ë!)
         File.WriteAllBytes(fullPath, bytes);
 
-        Debug.Log($"[LLM ÀÌ¹ÌÁö »ı¼º ¿Ï·á]\n°æ·Î: {fullPath}");
-
-        // »ı¼ºµÈ Texture2Dµµ ¸Ş¸ğ¸®¿¡¼­ ÇØÁ¦
-        Destroy(screenShot);
+        DestroyImmediate(screenShot);
+        Debug.Log($"[í¼ì¦ ì „ìš© ìº¡ì²˜ ì™„ë£Œ] ê²½ë¡œ: {fullPath}");
     }
 
-    // Å×½ºÆ®¿ëÀ¸·Î ½ºÆäÀÌ½º¹Ù ´©¸£¸é Ä¸Ã³
     private void Update()
     {
         if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
         {
-            CaptureForLLM();
+            CaptureOnlyPuzzle();
         }
     }
 }

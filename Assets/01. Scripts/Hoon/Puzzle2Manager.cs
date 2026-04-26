@@ -1,73 +1,33 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Puzzle2Manager : MonoBehaviour
 {
-    [Header("È°¼ºÈ­ ½ÃÅ³ ÆÛÁñ ¼ø¼­´ë·Î ÇÒ´ç")]
-    public GameObject[] puzzles;
+    [Header("ëª¨ë“  ë ˆë²¨ì˜ Puzzle2 ì¸ìŠ¤í„´ìŠ¤")]
+    public Puzzle2[] allPuzzles;
 
-    [Header("ÇöÀç Å¬¸¯ È½¼ö TMP ÇÒ´ç")]
-    public TextMeshPro maxClickText;
-    public TextMeshPro curClickText;
+    [Header("í˜„ì¬ í’€ê³  ìˆëŠ” Puzzle2 ì¸ìŠ¤í„´ìŠ¤")]
+    public Puzzle2 curPuzzle;
 
     public static Puzzle2Manager instance;
-
-    private int curPuzzleIndex;
 
     private void Awake()
     {
         if (instance == null) instance = this;
-        curPuzzleIndex = 0;
     }
 
-    private void Start()
+    // íŠ¸ë¦¬ê±° ë°œë™ ì‹œ curPuzzle ì¸ìŠ¤í„´ìŠ¤ê°€ ë°”ë€ŒëŠ” í•¨ìˆ˜.
+    public void UpdateCurPuzzle(int targetLevel)
     {
-        // ¸ğµç ÆÛÁñ ¿ÀºêÁ§Æ® ÀÏ´Ü ºñÈ°¼ºÈ­
-        foreach (GameObject p in puzzles)
-        {
-            p.SetActive(false);
-        }
-        // Ã¹ ¹øÂ° ·¹º§ ÆÛÁñ ¿ÀºêÁ§Æ®¸¸ È°¼ºÈ­ ÈÄ ÅØ½ºÆ® ¾÷µ¥ÀÌÆ®.
-        puzzles[curPuzzleIndex].SetActive(true);
-        Puzzle2 curPuzzle = puzzles[curPuzzleIndex].GetComponent<Puzzle2>();
-        UpdateClickText(curPuzzle);
+
     }
-
-    // ´ÙÀ½ ·¹º§ÀÇ ÆÛÁñ È°¼ºÈ­ ½Ãµµ. ¸¸¾à ÃÖ´ë ·¹º§À» ³ÑÀ¸¸é Å¬¸®¾î Ã³¸®.
-    public void ActivateNextPuzzle2()
+    
+    public List<int> GetSolution()
     {
-        // ÇöÀç ·¹º§ ºñÈ°¼ºÈ­.
-        puzzles[curPuzzleIndex].SetActive(false);
-
-        // ¸ğµç ·¹º§ ´Ù Å¬¸®¾î ÇßÀ» ¶§
-        if (++curPuzzleIndex >= puzzles.Length)
-        {
-            AllPuzzleClear();
-            return;
-        }
-
-        // ´ÙÀ½ ·¹º§ È°¼ºÈ­ ½ÃÅ°°í Å¬¸¯ Text ¾÷µ¥ÀÌÆ®.
-        Puzzle2 curPuzzle = puzzles[curPuzzleIndex].GetComponent<Puzzle2>();
-        puzzles[curPuzzleIndex].SetActive(true);
-        UpdateClickText(curPuzzle);
-    }
-
-    // ¸ğµç ÇÒ´çµÈ ·¹º§ Å¬¸®¾î ½Ã È£Ãâ
-    public void AllPuzzleClear()
-    {
-        Debug.Log("ÆÛÁñ 2 ¸ğµç ·¹º§ Å¬¸®¾î");
-    }
-
-    // ¸®¼Â ¿ÀºêÁ§Æ® Å¬¸¯ ½Ã ¸ğµç ³ëµå ²¨Áö´Â ÇÔ¼ö È£Ãâ. (ResetNodes.cs¿¡¼­¸¸ È£Ãâ.)
-    public void ResetAllNodes()
-    {
-        puzzles[curPuzzleIndex].GetComponent<Puzzle2>().Reset();
-    }
-
-    // ÇöÀç ÆÛÁñÀ» ÂüÁ¶ÇÏ¿© Å¬¸¯ È½¼ö ÅØ½ºÆ® ¾÷µ¥ÀÌÆ®.
-    public void UpdateClickText(Puzzle2 curPuzzle)
-    {
-        maxClickText.text = "Max Clicks: " + curPuzzle.maxClickTimes;
-        curClickText.text = "Cur Clicks: " + curPuzzle.curClickTimes;
+        if (curPuzzle != null)
+            return curPuzzle.GetBestSolution();
+        return null;
     }
 }
