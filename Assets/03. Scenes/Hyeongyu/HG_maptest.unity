@@ -18605,43 +18605,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4425874899348998, guid: e3b08ca4cbd32534ea8d0b5e519709e2, type: 3}
   m_PrefabInstance: {fileID: 1043629119}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1051281487 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3293748795959708645, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
+--- !u!114 &1051281492 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3605643833554104031, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
   m_PrefabInstance: {fileID: 5521765821517009833}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1051281492
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1051281487}
+  m_GameObject: {fileID: 0}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBrain
-  ShowDebugText: 0
-  ShowCameraFrustum: 1
-  IgnoreTimeScale: 0
-  WorldUpOverride: {fileID: 0}
-  ChannelMask: -1
-  UpdateMethod: 2
-  BlendUpdateMethod: 1
-  LensModeOverride:
-    Enabled: 0
-    DefaultMode: 2
-  DefaultBlend:
-    Style: 1
-    Time: 2
-    CustomCurve:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  CustomBlends: {fileID: 0}
 --- !u!4 &1051873818 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4634395377019306, guid: 52174d465cd2c1445b611d4541065314, type: 3}
@@ -38096,11 +38070,23 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 785937932}
     - target: {fileID: 9045948573299488985, guid: 65bd4a6b230b41546a20ce2d982fc4b4, type: 3}
+      propertyPath: mainCameraBrain
+      value: 
+      objectReference: {fileID: 1051281492}
+    - target: {fileID: 9045948573299488985, guid: 65bd4a6b230b41546a20ce2d982fc4b4, type: 3}
       propertyPath: cinemachineBrain
       value: 
       objectReference: {fileID: 1051281492}
     - target: {fileID: 9045948573299488985, guid: 65bd4a6b230b41546a20ce2d982fc4b4, type: 3}
       propertyPath: cutsceneDirector
+      value: 
+      objectReference: {fileID: 1272743975}
+    - target: {fileID: 9045948573299488985, guid: 65bd4a6b230b41546a20ce2d982fc4b4, type: 3}
+      propertyPath: playerMovementBehaviour
+      value: 
+      objectReference: {fileID: 785937932}
+    - target: {fileID: 9045948573299488985, guid: 65bd4a6b230b41546a20ce2d982fc4b4, type: 3}
+      propertyPath: cutscenePlayableDirector
       value: 
       objectReference: {fileID: 1272743975}
     - target: {fileID: 9045948573299488985, guid: 65bd4a6b230b41546a20ce2d982fc4b4, type: 3}
@@ -38113,6 +38099,18 @@ PrefabInstance:
       objectReference: {fileID: 1224290151}
     - target: {fileID: 9045948573299488985, guid: 65bd4a6b230b41546a20ce2d982fc4b4, type: 3}
       propertyPath: 'floorsToRise.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1769366498}
+    - target: {fileID: 9045948573299488985, guid: 65bd4a6b230b41546a20ce2d982fc4b4, type: 3}
+      propertyPath: 'floorTransformsToRaise.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1546847724}
+    - target: {fileID: 9045948573299488985, guid: 65bd4a6b230b41546a20ce2d982fc4b4, type: 3}
+      propertyPath: 'floorTransformsToRaise.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1224290151}
+    - target: {fileID: 9045948573299488985, guid: 65bd4a6b230b41546a20ce2d982fc4b4, type: 3}
+      propertyPath: 'floorTransformsToRaise.Array.data[2]'
       value: 
       objectReference: {fileID: 1769366498}
     m_RemovedComponents: []
@@ -38173,11 +38171,23 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 785937932}
     - target: {fileID: 4774352461191017906, guid: d8d30acdbe3c1734f834dc31e5ed53ce, type: 3}
+      propertyPath: mainCameraBrain
+      value: 
+      objectReference: {fileID: 1051281492}
+    - target: {fileID: 4774352461191017906, guid: d8d30acdbe3c1734f834dc31e5ed53ce, type: 3}
       propertyPath: cinemachineBrain
       value: 
       objectReference: {fileID: 1051281492}
     - target: {fileID: 4774352461191017906, guid: d8d30acdbe3c1734f834dc31e5ed53ce, type: 3}
       propertyPath: cutsceneDirector
+      value: 
+      objectReference: {fileID: 2399031210154042708}
+    - target: {fileID: 4774352461191017906, guid: d8d30acdbe3c1734f834dc31e5ed53ce, type: 3}
+      propertyPath: playerMovementBehaviour
+      value: 
+      objectReference: {fileID: 785937932}
+    - target: {fileID: 4774352461191017906, guid: d8d30acdbe3c1734f834dc31e5ed53ce, type: 3}
+      propertyPath: cutscenePlayableDirector
       value: 
       objectReference: {fileID: 2399031210154042708}
     - target: {fileID: 4774352461191017906, guid: d8d30acdbe3c1734f834dc31e5ed53ce, type: 3}
@@ -38190,6 +38200,18 @@ PrefabInstance:
       objectReference: {fileID: 74437217}
     - target: {fileID: 4774352461191017906, guid: d8d30acdbe3c1734f834dc31e5ed53ce, type: 3}
       propertyPath: 'floorsToRise.Array.data[2]'
+      value: 
+      objectReference: {fileID: 680236289}
+    - target: {fileID: 4774352461191017906, guid: d8d30acdbe3c1734f834dc31e5ed53ce, type: 3}
+      propertyPath: 'floorTransformsToRaise.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1265230397}
+    - target: {fileID: 4774352461191017906, guid: d8d30acdbe3c1734f834dc31e5ed53ce, type: 3}
+      propertyPath: 'floorTransformsToRaise.Array.data[1]'
+      value: 
+      objectReference: {fileID: 74437217}
+    - target: {fileID: 4774352461191017906, guid: d8d30acdbe3c1734f834dc31e5ed53ce, type: 3}
+      propertyPath: 'floorTransformsToRaise.Array.data[2]'
       value: 
       objectReference: {fileID: 680236289}
     - target: {fileID: 4972112870974080607, guid: d8d30acdbe3c1734f834dc31e5ed53ce, type: 3}
@@ -38253,65 +38275,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3111642365182691575, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3111642365182691575, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.35
-      objectReference: {fileID: 0}
-    - target: {fileID: 3111642365182691575, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3111642365182691575, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3111642365182691575, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3111642365182691575, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3111642365182691575, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3785289114233694899, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
-      propertyPath: field of view
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 3785289114233694899, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
-      propertyPath: far clip plane
-      value: 5000
-      objectReference: {fileID: 0}
-    - target: {fileID: 3785289114233694899, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
-      propertyPath: near clip plane
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3785289114233694899, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
-      propertyPath: orthographic size
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 7340783839877027457, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
       propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 7340783839877027457, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
-      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3293748795959708645, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1051281492}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
 --- !u!1001 &5975043831739116418
 PrefabInstance:
@@ -38330,15 +38301,35 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2001000202}
     - target: {fileID: 1703454601459560718, guid: c0e05a543ea461d43a168f0761d7f44a, type: 3}
+      propertyPath: doorController
+      value: 
+      objectReference: {fileID: 948549545}
+    - target: {fileID: 1703454601459560718, guid: c0e05a543ea461d43a168f0761d7f44a, type: 3}
       propertyPath: playerMovement
       value: 
       objectReference: {fileID: 785937932}
+    - target: {fileID: 1703454601459560718, guid: c0e05a543ea461d43a168f0761d7f44a, type: 3}
+      propertyPath: mainCameraBrain
+      value: 
+      objectReference: {fileID: 1051281492}
     - target: {fileID: 1703454601459560718, guid: c0e05a543ea461d43a168f0761d7f44a, type: 3}
       propertyPath: cinemachineBrain
       value: 
       objectReference: {fileID: 1051281492}
     - target: {fileID: 1703454601459560718, guid: c0e05a543ea461d43a168f0761d7f44a, type: 3}
       propertyPath: cutsceneDirector
+      value: 
+      objectReference: {fileID: 2001000102}
+    - target: {fileID: 1703454601459560718, guid: c0e05a543ea461d43a168f0761d7f44a, type: 3}
+      propertyPath: cutsceneVirtualCamera
+      value: 
+      objectReference: {fileID: 2001000202}
+    - target: {fileID: 1703454601459560718, guid: c0e05a543ea461d43a168f0761d7f44a, type: 3}
+      propertyPath: playerMovementBehaviour
+      value: 
+      objectReference: {fileID: 785937932}
+    - target: {fileID: 1703454601459560718, guid: c0e05a543ea461d43a168f0761d7f44a, type: 3}
+      propertyPath: cutscenePlayableDirector
       value: 
       objectReference: {fileID: 2001000102}
     - target: {fileID: 1795972905259192731, guid: c0e05a543ea461d43a168f0761d7f44a, type: 3}
@@ -38451,11 +38442,23 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 785937932}
     - target: {fileID: 5563948331711869215, guid: 2c98993b6c251ab4da6f471417b809ea, type: 3}
+      propertyPath: mainCameraBrain
+      value: 
+      objectReference: {fileID: 1051281492}
+    - target: {fileID: 5563948331711869215, guid: 2c98993b6c251ab4da6f471417b809ea, type: 3}
       propertyPath: cinemachineBrain
       value: 
       objectReference: {fileID: 1051281492}
     - target: {fileID: 5563948331711869215, guid: 2c98993b6c251ab4da6f471417b809ea, type: 3}
       propertyPath: cutsceneDirector
+      value: 
+      objectReference: {fileID: 1382054472}
+    - target: {fileID: 5563948331711869215, guid: 2c98993b6c251ab4da6f471417b809ea, type: 3}
+      propertyPath: playerMovementBehaviour
+      value: 
+      objectReference: {fileID: 785937932}
+    - target: {fileID: 5563948331711869215, guid: 2c98993b6c251ab4da6f471417b809ea, type: 3}
+      propertyPath: cutscenePlayableDirector
       value: 
       objectReference: {fileID: 1382054472}
     - target: {fileID: 5563948331711869215, guid: 2c98993b6c251ab4da6f471417b809ea, type: 3}
@@ -38468,6 +38471,18 @@ PrefabInstance:
       objectReference: {fileID: 478105513}
     - target: {fileID: 5563948331711869215, guid: 2c98993b6c251ab4da6f471417b809ea, type: 3}
       propertyPath: 'floorsToRise.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1008351461}
+    - target: {fileID: 5563948331711869215, guid: 2c98993b6c251ab4da6f471417b809ea, type: 3}
+      propertyPath: 'floorTransformsToRaise.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1187069153}
+    - target: {fileID: 5563948331711869215, guid: 2c98993b6c251ab4da6f471417b809ea, type: 3}
+      propertyPath: 'floorTransformsToRaise.Array.data[1]'
+      value: 
+      objectReference: {fileID: 478105513}
+    - target: {fileID: 5563948331711869215, guid: 2c98993b6c251ab4da6f471417b809ea, type: 3}
+      propertyPath: 'floorTransformsToRaise.Array.data[2]'
       value: 
       objectReference: {fileID: 1008351461}
     m_RemovedComponents: []

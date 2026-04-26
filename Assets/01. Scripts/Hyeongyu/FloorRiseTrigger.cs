@@ -1,21 +1,22 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 
 namespace Hyeongyu
 {
     public class FloorRiseTrigger : MonoBehaviour
     {
-        [SerializeField] private Transform[] floorsToRise;
-        [SerializeField] private float targetY;
-        [SerializeField] private float riseDuration = 2f;
-        [SerializeField] private PlayableDirector cutsceneDirector;
-        [SerializeField] private bool useScriptFloorRise = true;
-        [SerializeField] private MonoBehaviour playerMovement;
-        [SerializeField] private Behaviour cinemachineBrain;
-        [SerializeField] private Behaviour cutsceneCamera;
+        [SerializeField, FormerlySerializedAs("floorsToRise")] private Transform[] floorTransformsToRaise;
+        [SerializeField, FormerlySerializedAs("targetY")] private float targetLocalY;
+        [SerializeField, FormerlySerializedAs("riseDuration")] private float raiseDurationSeconds = 2f;
+        [SerializeField, FormerlySerializedAs("cutsceneDirector")] private PlayableDirector cutscenePlayableDirector;
+        [SerializeField, FormerlySerializedAs("useScriptFloorRise")] private bool animateFloorsInScript = true;
+        [SerializeField, FormerlySerializedAs("playerMovement")] private MonoBehaviour playerMovementBehaviour;
+        [SerializeField, FormerlySerializedAs("cinemachineBrain")] private Behaviour mainCameraBrain;
+        [SerializeField, FormerlySerializedAs("cutsceneCamera")] private Behaviour cutsceneVirtualCamera;
 
-        private bool _triggered;
+        private bool hasTriggered;
 
         private void Awake()
         {
@@ -24,8 +25,8 @@ namespace Hyeongyu
 
         private void OnTriggerEnter(Collider other)
         {
-            if (_triggered || !other.CompareTag("Player")) return;
-            _triggered = true;
+            if (hasTriggered || !other.CompareTag("Player")) return;
+            hasTriggered = true;
             StartCoroutine(PlayCutscene());
         }
 
@@ -34,124 +35,126 @@ namespace Hyeongyu
             ResolveRuntimeReferences();
             BindTimelineOutputs();
 
-            if (playerMovement != null)
-                playerMovement.enabled = false;
+            if (playerMovementBehaviour != null)
+                playerMovementBehaviour.enabled = false;
 
-            Camera cam = cinemachineBrain != null ? cinemachineBrain.GetComponent<Camera>() : null;
-            Transform camTransform = cam != null ? cam.transform : null;
-            Vector3 cachedLocalPos = Vector3.zero;
-            Quaternion cachedLocalRot = Quaternion.identity;
-            float cachedFov = 60f;
-            if (camTransform != null)
+            Camera mainCamera = mainCameraBrain != null ? mainCameraBrain.GetComponent<Camera>() : null;
+            Transform mainCameraTransform = mainCamera != null ? mainCamera.transform : null;
+            Vector3 cachedCameraLocalPosition = Vector3.zero;
+            Quaternion cachedCameraLocalRotation = Quaternion.identity;
+            float cachedCameraFieldOfView = 60f;
+            if (mainCameraTransform != null)
             {
-                cachedLocalPos = camTransform.localPosition;
-                cachedLocalRot = camTransform.localRotation;
-                cachedFov = cam.fieldOfView;
-                if (cutsceneCamera != null)
-                    cutsceneCamera.enabled = true;
-                cinemachineBrain.enabled = true;
+                cachedCameraLocalPosition = mainCameraTransform.localPosition;
+                cachedCameraLocalRotation = mainCameraTransform.localRotation;
+                cachedCameraFieldOfView = mainCamera.fieldOfView;
+                if (cutsceneVirtualCamera != null)
+                    cutsceneVirtualCamera.enabled = true;
+                mainCameraBrain.enabled = true;
             }
 
-            if (cutsceneDirector != null)
-                cutsceneDirector.Play();
+            if (cutscenePlayableDirector != null)
+                cutscenePlayableDirector.Play();
 
-            if (useScriptFloorRise)
+            if (animateFloorsInScript)
                 yield return RiseFloors();
-            else if (riseDuration > 0f)
-                yield return new WaitForSeconds(riseDuration);
+            else if (raiseDurationSeconds > 0f)
+                yield return new WaitForSeconds(raiseDurationSeconds);
 
-            if (cutsceneDirector != null)
+            if (cutscenePlayableDirector != null)
             {
-                float remaining = (float)cutsceneDirector.duration - riseDuration;
-                if (remaining > 0f)
-                    yield return new WaitForSeconds(remaining);
+                float remainingTimelineSeconds = (float)cutscenePlayableDirector.duration - raiseDurationSeconds;
+                if (remainingTimelineSeconds > 0f)
+                    yield return new WaitForSeconds(remainingTimelineSeconds);
             }
 
-            if (cinemachineBrain != null)
+            if (mainCameraBrain != null)
             {
-                cinemachineBrain.enabled = false;
-                if (cutsceneCamera != null)
-                    cutsceneCamera.enabled = false;
-                if (camTransform != null)
+                mainCameraBrain.enabled = false;
+                if (cutsceneVirtualCamera != null)
+                    cutsceneVirtualCamera.enabled = false;
+                if (mainCameraTransform != null)
                 {
-                    camTransform.localPosition = cachedLocalPos;
-                    camTransform.localRotation = cachedLocalRot;
-                    cam.fieldOfView = cachedFov;
+                    mainCameraTransform.localPosition = cachedCameraLocalPosition;
+                    mainCameraTransform.localRotation = cachedCameraLocalRotation;
+                    mainCamera.fieldOfView = cachedCameraFieldOfView;
                 }
             }
 
-            if (playerMovement != null)
-                playerMovement.enabled = true;
+            if (playerMovementBehaviour != null)
+                playerMovementBehaviour.enabled = true;
         }
 
         private IEnumerator RiseFloors()
         {
-            float elapsed = 0;
-            Vector3[] startPos = System.Array.ConvertAll(floorsToRise, f => f != null ? f.localPosition : Vector3.zero);
-            while (elapsed < riseDuration)
+            float elapsedSeconds = 0f;
+            Vector3[] startLocalPositions = System.Array.ConvertAll(
+                floorTransformsToRaise,
+                floorTransform => floorTransform != null ? floorTransform.localPosition : Vector3.zero);
+            while (elapsedSeconds < raiseDurationSeconds)
             {
-                elapsed += Time.deltaTime;
-                float t = Mathf.Clamp01(elapsed / riseDuration);
-                for (int i = 0; i < floorsToRise.Length; i++)
+                elapsedSeconds += Time.deltaTime;
+                float normalizedTime = Mathf.Clamp01(elapsedSeconds / raiseDurationSeconds);
+                for (int i = 0; i < floorTransformsToRaise.Length; i++)
                 {
-                    if (floorsToRise[i] == null) continue;
+                    if (floorTransformsToRaise[i] == null) continue;
 
-                    Vector3 p = startPos[i];
-                    p.y = Mathf.Lerp(startPos[i].y, targetY, t);
-                    floorsToRise[i].localPosition = p;
+                    Vector3 localPosition = startLocalPositions[i];
+                    localPosition.y = Mathf.Lerp(startLocalPositions[i].y, targetLocalY, normalizedTime);
+                    floorTransformsToRaise[i].localPosition = localPosition;
                 }
                 yield return null;
             }
 
-            for (int i = 0; i < floorsToRise.Length; i++)
+            for (int i = 0; i < floorTransformsToRaise.Length; i++)
             {
-                if (floorsToRise[i] == null) continue;
+                if (floorTransformsToRaise[i] == null) continue;
 
-                Vector3 p = floorsToRise[i].localPosition;
-                p.y = targetY;
-                floorsToRise[i].localPosition = p;
+                Vector3 localPosition = floorTransformsToRaise[i].localPosition;
+                localPosition.y = targetLocalY;
+                floorTransformsToRaise[i].localPosition = localPosition;
             }
         }
 
         private void ResolveRuntimeReferences()
         {
-            if (cutsceneDirector == null)
-                cutsceneDirector = GetComponentInChildren<PlayableDirector>(true);
+            if (cutscenePlayableDirector == null)
+                cutscenePlayableDirector = GetComponentInChildren<PlayableDirector>(true);
 
-            if (cutsceneCamera == null)
+            if (cutsceneVirtualCamera == null)
             {
                 foreach (Behaviour behaviour in GetComponentsInChildren<Behaviour>(true))
                 {
                     if (behaviour.GetType().FullName == "Unity.Cinemachine.CinemachineCamera")
                     {
-                        cutsceneCamera = behaviour;
+                        cutsceneVirtualCamera = behaviour;
                         break;
                     }
                 }
             }
 
             GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (playerMovement == null && player != null)
-                playerMovement = player.GetComponent("PlayerMovement") as MonoBehaviour;
+            if (playerMovementBehaviour == null && player != null)
+                playerMovementBehaviour = player.GetComponent("PlayerMovement") as MonoBehaviour;
 
-            if (cinemachineBrain == null)
+            if (mainCameraBrain == null)
             {
-                Camera cam = Camera.main != null ? Camera.main : FindFirstObjectByType<Camera>();
-                if (cam != null)
-                    cinemachineBrain = cam.GetComponent("CinemachineBrain") as Behaviour;
+                Camera mainCamera = Camera.main != null ? Camera.main : FindFirstObjectByType<Camera>();
+                if (mainCamera != null)
+                    mainCameraBrain = mainCamera.GetComponent("CinemachineBrain") as Behaviour;
             }
         }
 
         private void BindTimelineOutputs()
         {
-            if (cutsceneDirector == null || cutsceneDirector.playableAsset == null || cinemachineBrain == null)
+            if (cutscenePlayableDirector == null || cutscenePlayableDirector.playableAsset == null || mainCameraBrain == null)
                 return;
 
-            foreach (PlayableBinding output in cutsceneDirector.playableAsset.outputs)
+            foreach (PlayableBinding output in cutscenePlayableDirector.playableAsset.outputs)
             {
                 Object source = output.sourceObject;
                 if (source != null && source.GetType().FullName == "Unity.Cinemachine.CinemachineTrack")
-                    cutsceneDirector.SetGenericBinding(source, cinemachineBrain);
+                    cutscenePlayableDirector.SetGenericBinding(source, mainCameraBrain);
             }
         }
     }
