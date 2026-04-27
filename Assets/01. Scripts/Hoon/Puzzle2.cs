@@ -5,20 +5,24 @@ using UnityEngine;
 
 public class Puzzle2 : MonoBehaviour
 {
-    public static Action<int> OnPuzzleCleared; // 해당 레벨 퍼즐 클리어 시 방송
+    public static Action OnPuzzleCleared; // 해당 레벨 퍼즐 클리어 시 방송
 
     [Header("색상 설정")]
     public Color onColor = Color.green;
     public Color offColor = new Color(0.5f, 0.5f, 0.5f);
 
     [Header("해당 레벨 최소 클릭 횟수 설정")]
+    public int maxClickTimes;
     public int curClickTimes;
 
     [Header("퍼즐 번호 설정")]
     public int curPuzzleNum;
 
     [Header("현재 클릭 횟수 TMP")]
-    public TextMeshPro curClicks;
+    public TextMeshPro curClicksTmp;
+
+    [Header("최대 클릭 횟수 TMP")]
+    public TextMeshPro maxClicksTmp;
 
     private Puzzle2Node[] allNodes; // 클리어 체크용으로만 씀
 
@@ -53,7 +57,10 @@ public class Puzzle2 : MonoBehaviour
 
         // 모든 노드 활성화 체크 후 클리어 처리.
         if (CheckClear()) Clear();
-        
+        if (curClickTimes >= maxClickTimes)
+        {
+            Reset();
+        }
     }
 
     protected bool CheckClear()
@@ -80,7 +87,7 @@ public class Puzzle2 : MonoBehaviour
 
         isCleared = true;
         Debug.Log("해당 레벨 클리어.");
-        OnPuzzleCleared?.Invoke(curPuzzleNum);
+        OnPuzzleCleared?.Invoke();
     }
 
     // 해당 레벨의 노드 전부 꺼지는 리셋.
@@ -100,26 +107,64 @@ public class Puzzle2 : MonoBehaviour
     public (Puzzle2Node[] nodes, int[,] A, int[] b) GetSolverData()
     {
         int n = allNodes.Length;
-
-        var nodeIndex = new System.Collections.Generic.Dictionary<Puzzle2Node, int>(n);
-        for (int i = 0; i < n; i++)
-            if (allNodes[i] != null) nodeIndex[allNodes[i]] = i;
-
-        int[,] A = new int[n, n];
-        for (int j = 0; j < n; j++)
-        {
-            if (allNodes[j] == null) continue;
-            A[j, j] = 1;
-            foreach (Puzzle2Node nb in allNodes[j].neighbors)
-                if (nb != null && nodeIndex.TryGetValue(nb, out int idx))
-                    A[idx, j] = 1;
-        }
+        int[,] A = GetNodeAdjacencyList();
 
         int[] b = new int[n];
         for (int i = 0; i < n; i++)
             b[i] = (allNodes[i] != null && allNodes[i].isOn) ? 0 : 1;
 
         return (allNodes, A, b);
+    }
+
+    // 현재 노드들의 인접리스트를 nxn 배열로 나타내는 함수
+    public int[,] GetNodeAdjacencyList()
+    {
+        int n = allNodes.Length;
+        int[,] answer = new int[n, n];
+
+        var nodeIndex = new System.Collections.Generic.Dictionary<Puzzle2Node, int>(n);
+        for (int i = 0; i < n; i++)
+            if (allNodes[i] != null) nodeIndex[allNodes[i]] = i;
+
+        for (int j = 0; j < n; j++)
+        {
+            if (allNodes[j] == null) continue;
+            answer[j, j] = 1;
+            foreach (Puzzle2Node nb in allNodes[j].neighbors)
+                if (nb != null && nodeIndex.TryGetValue(nb, out int idx))
+                    answer[idx, j] = 1;
+        }
+        return answer;
+    }
+
+    // 노드 인접리스트를 string 형태로 1번노드: 2, 6, 7 2번노드: 1, 3, 6 처럼 나타내주는 함수.
+    public string GetNodeRelation()
+    {
+        // 행렬 데이터 가져오기 (n x n)
+        int[,] adjacencyMatrix = GetNodeAdjacencyList();
+        int n = allNodes.Length;
+
+        // 각 행의 결과를 담을 리스트
+        List<string> relationRows = new List<string>();
+
+        for (int j = 0; j < n; j++) // j는 클릭하는 버튼 (열)
+        {
+            List<int> neighbors = new List<int>();
+
+            for (int i = 0; i < n; i++) // i는 영향을 받는 노드 (행)
+            {
+                if (i != j && adjacencyMatrix[i, j] == 1)
+                {
+                    neighbors.Add(i + 1); // 0번 인덱스를 1번 노드로 표기하기 위해 +1
+                }
+            }
+            // "1번 노드: 2, 3, 5, 9" 형태의 문자열 생성
+            string neighborText = neighbors.Count > 0 ? string.Join(", ", neighbors) : "없음";
+            relationRows.Add($"{j + 1}번 노드: {neighborText}");
+        }
+
+        // 3. 모든 행을 줄바꿈(\n)으로 합쳐서 반환
+        return string.Join("\n", relationRows);
     }
 
     // ── 솔버 ────────────────────────────────────────────────────────────────
@@ -244,7 +289,9 @@ public class Puzzle2 : MonoBehaviour
 
     public void UpdateClickText()
     {
-        if (curClicks != null)
-            curClicks.text = "Cur Clicks: " + curClickTimes;
+        if (curClicksTmp != null)
+            curClicksTmp.text = "Cur Clicks: " + curClickTimes;
+        if (maxClicksTmp != null)
+            maxClicksTmp.text = "Max Clicks: " + maxClickTimes;
     }
 }
