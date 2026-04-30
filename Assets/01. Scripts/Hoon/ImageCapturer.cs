@@ -1,80 +1,59 @@
-﻿using System.IO;
-using UnityEngine;
-using UnityEngine.InputSystem;
+﻿using UnityEngine;
+using System.IO;
 
 public class ImageCapturer : MonoBehaviour
 {
-    [Header("핵심 대상 설정")]
-    public Camera targetCamera;
+    [Header("연결")]
+    public Camera puzzleCamera;
+    public RectTransform drawArea;
 
-    [Tooltip("퍼즐 오브젝트들이 속한 레이어를 선택하세요.")]
-    public LayerMask puzzleLayer; // 새로 추가된 부분
+    [Header("저장 설정")]
+    [Tooltip("캡쳐 저장 경로")]
+    public string savePath = "C:/Temp";
 
-    [Header("해상도 설정")]
-    public int resWidth = 512;
-    public int resHeight = 512;
+    [Tooltip("확장자를 포함한 png 파일 이름")]
+    public string fileName = "Result.png";
 
-    [Header("저장 경로 설정")]
-    public string folderName = "04. Data/Captures";
+    [Header("품질 설정")]
+    public int resolutionScale = 4;
 
-    private void Start()
+    [ContextMenu("Capture Drawing")]
+    public void CaptureAndSave()
     {
-        if (targetCamera == null) targetCamera = Camera.main;
-    }
+        string fullPath = Path.Combine(savePath, fileName);
 
-    public void CaptureOnlyPuzzle()
-    {
-        if (targetCamera == null) return;
+        // 해상도 설정
+        int width = (int)drawArea.rect.width * resolutionScale;
+        int height = (int)drawArea.rect.height * resolutionScale;
 
-        // 1. 카메라 상태 백업 (마스크, 배경색 등)
-        int originalMask = targetCamera.cullingMask;
-        Color originalBG = targetCamera.backgroundColor;
-        CameraClearFlags originalFlags = targetCamera.clearFlags;
+        // 렌더 텍스처 준비
+        RenderTexture rt = new RenderTexture(width, height, 24);
+        rt.antiAliasing = 8;
+        puzzleCamera.targetTexture = rt;
 
-        // 2. 촬영용 필터 세팅
-        // 특정 레이어만 보이게 하고, 나머지는 검은색(혹은 투명)으로 비웁니다.
-        targetCamera.cullingMask = puzzleLayer;
-        targetCamera.clearFlags = CameraClearFlags.SolidColor;
-        targetCamera.backgroundColor = Color.black; // LLM 인식을 위해 검은 배경 추천
-
-        // --- 캡처 로직 (기존과 동일) ---
-        RenderTexture rt = new RenderTexture(resWidth, resHeight, 24);
-        targetCamera.targetTexture = rt;
-        Texture2D screenShot = new Texture2D(resWidth, resHeight, TextureFormat.RGB24, false);
-
-        targetCamera.Render(); // 이 순간에만 퍼즐 레이어만 그려짐
+        // 카메라 렌더링 및 Texture2D 복사
+        Texture2D screenShot = new Texture2D(width, height, TextureFormat.RGB24, false);
+        puzzleCamera.Render();
 
         RenderTexture.active = rt;
-        screenShot.ReadPixels(new Rect(0, 0, resWidth, resHeight), 0, 0);
+        screenShot.ReadPixels(new Rect(0, 0, width, height), 0, 0);
         screenShot.Apply();
 
-        // 3. 뒷정리 (카메라를 원래대로 돌려놓기)
-        targetCamera.targetTexture = null;
+        // 정리
+        puzzleCamera.targetTexture = null;
         RenderTexture.active = null;
-        DestroyImmediate(rt);
+        Destroy(rt);
 
-        targetCamera.cullingMask = originalMask; // 원래 레이어 설정 복구
-        targetCamera.clearFlags = originalFlags;
-        targetCamera.backgroundColor = originalBG;
+        // 폴더가 없다면 생성
+        if (!Directory.Exists(savePath))
+        {
+            Directory.CreateDirectory(savePath);
+        }
 
-        // 4. 저장
-        byte[] bytes = screenShot.EncodeToJPG(85);
-        string directoryPath = Path.Combine(Application.dataPath, folderName);
-        if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
-
-        string fileName = "LLM_Input_Current.jpg";
-        string fullPath = Path.Combine(directoryPath, fileName);
+        // PNG 저장
+        byte[] bytes = screenShot.EncodeToPNG();
         File.WriteAllBytes(fullPath, bytes);
 
-        DestroyImmediate(screenShot);
-        Debug.Log($"[퍼즐 전용 캡처 완료] 경로: {fullPath}");
-    }
-
-    private void Update()
-    {
-        if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            CaptureOnlyPuzzle();
-        }
+        Debug.Log($"그림 덮어쓰기 완료. 최종 경로: {fullPath}");
     }
 }
