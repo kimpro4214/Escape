@@ -180,11 +180,14 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dd65ac8f47330684098c3ecc87139f3c, type: 3}
+<<<<<<< HEAD
 --- !u!4 &242757467 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8567915896075713053, guid: 8694fc1efb6a1824797522dcf6372fdc, type: 3}
   m_PrefabInstance: {fileID: 1156535756310980522}
   m_PrefabAsset: {fileID: 0}
+=======
+>>>>>>> parent of 1210ba2 (Merge pull request #13 from kimpro4214/feat/Interact)
 --- !u!1 &275435669 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6013632388104371084, guid: 6e0965b76baec374d9a8e0c82f9033cb, type: 3}
@@ -685,6 +688,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Effect_PlayerSpawn
   maxPlayTime: 8
+<<<<<<< HEAD
 --- !u!1001 &521195170
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -898,6 +902,8 @@ Transform:
   - {fileID: 7262518205162748486}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+=======
+>>>>>>> parent of 1210ba2 (Merge pull request #13 from kimpro4214/feat/Interact)
 --- !u!1 &1117330027
 GameObject:
   m_ObjectHideFlags: 0
@@ -1862,6 +1868,9 @@ SceneRoots:
   - {fileID: 242248781}
   - {fileID: 1829041763}
   - {fileID: 1841720351}
+<<<<<<< HEAD
   - {fileID: 521195170}
   - {fileID: 1648920645}
   - {fileID: 833408719}
+=======
+>>>>>>> parent of 1210ba2 (Merge pull request #13 from kimpro4214/feat/Interact)

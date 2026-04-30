@@ -7,8 +7,6 @@ namespace Hyeongyu
 {
     public class DoorTrigger : MonoBehaviour
     {
-        private const string CinemachineBrainTypeName = "Unity.Cinemachine.CinemachineBrain";
-
         [SerializeField, FormerlySerializedAs("door")] private DoorController doorController;
         [SerializeField, FormerlySerializedAs("cutsceneDirector")] private PlayableDirector cutscenePlayableDirector;
         [SerializeField, FormerlySerializedAs("playerMovement")] private MonoBehaviour playerMovementBehaviour;
@@ -105,15 +103,11 @@ namespace Hyeongyu
             if (playerMovementBehaviour == null && player != null)
                 playerMovementBehaviour = player.GetComponent("PlayerMovement") as MonoBehaviour;
 
-            if (!IsValidCinemachineBrain(mainCameraBrain))
+            if (mainCameraBrain == null)
             {
-                Camera mainCamera = mainCameraBrain != null ? mainCameraBrain.GetComponent<Camera>() : null;
-                if (mainCamera == null)
-                    mainCamera = Camera.main != null ? Camera.main : FindFirstObjectByType<Camera>();
-
-                mainCameraBrain = mainCamera != null
-                    ? mainCamera.GetComponent("CinemachineBrain") as Behaviour
-                    : null;
+                Camera mainCamera = Camera.main != null ? Camera.main : FindFirstObjectByType<Camera>();
+                if (mainCamera != null)
+                    mainCameraBrain = mainCamera.GetComponent("CinemachineBrain") as Behaviour;
             }
         }
 
@@ -128,11 +122,6 @@ namespace Hyeongyu
                 if (source != null && source.GetType().FullName == "Unity.Cinemachine.CinemachineTrack")
                     cutscenePlayableDirector.SetGenericBinding(source, mainCameraBrain);
             }
-        }
-
-        private static bool IsValidCinemachineBrain(Behaviour behaviour)
-        {
-            return behaviour != null && behaviour.GetType().FullName == CinemachineBrainTypeName;
         }
     }
 }
