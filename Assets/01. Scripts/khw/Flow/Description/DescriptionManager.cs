@@ -17,11 +17,14 @@ public class GameDescription
 
 public class DescriptionManager : MonoBehaviour
 {
+    public static DescriptionManager Instance { get; private set; }
+
     private Queue<GameDescription> descriptionQueue = new Queue<GameDescription>();
     private bool isBeingShown = false;
 
     private void Awake()
     {
+        if (Instance == null) Instance = this;
     }
 
     public void AddDescrptions(List<GameDescription> descriptions)

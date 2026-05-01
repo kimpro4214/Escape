@@ -11,25 +11,25 @@ public class DescriptionController : MonoBehaviour
         subtitleText ??= GetComponentInChildren<DescriptionText>().GetComponent<TextMeshProUGUI>();
     }
 
-    public void ShowSubtitle(string descText, float postDelay)
+    public void ShowDescription(string descText, float postDelay)
     {
-        UnDisplaySubtitle();
+        UnDisplayDescription();
 
         StopAllCoroutines();
 
         SetText(descText);
 
-        StartCoroutine(SubtitleShowCoroutine(postDelay));
+        StartCoroutine(DescriptionShowCoroutine(postDelay));
     }
 
     #region utilities
 
-    private void DisplaySubtitle()
+    private void DisplayDescription()
     {
         gameObject.SetActive(true);
     }
 
-    private void UnDisplaySubtitle()
+    private void UnDisplayDescription()
     {
         gameObject.SetActive(false);
     }
@@ -39,13 +39,13 @@ public class DescriptionController : MonoBehaviour
         subtitleText.text = $"{text}";
     }
 
-    IEnumerator SubtitleShowCoroutine(float delay)
+    IEnumerator DescriptionShowCoroutine(float delay)
     {
-        DisplaySubtitle();
+        DisplayDescription();
 
         yield return new WaitForSeconds(delay);
 
-        UnDisplaySubtitle();
+        UnDisplayDescription();
     }
 
     #endregion
