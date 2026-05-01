@@ -11,14 +11,11 @@ public class UIDrawer : MonoBehaviour
     public float zDepth = 9f;
 
     private LineRenderer currentLine;
-    private Camera mainCam;
+    [Header("도화지 카메라")]
+    public Camera drawCam;
 
     private Stack<GameObject> drawnLines = new Stack<GameObject>();
 
-    void Awake()
-    {
-        mainCam = Camera.main;
-    }
 
     void Update()
     {
@@ -49,7 +46,7 @@ public class UIDrawer : MonoBehaviour
 
     private bool IsMouseInDrawArea()
     {
-        return RectTransformUtility.RectangleContainsScreenPoint(drawArea, Input.mousePosition, mainCam);
+        return RectTransformUtility.RectangleContainsScreenPoint(drawArea, Input.mousePosition, drawCam);
     }
 
     private void StartDrawing()
@@ -57,7 +54,7 @@ public class UIDrawer : MonoBehaviour
         // 선 프리펩 생성
         GameObject lineGo = Instantiate(linePrefab);
 
-        // 방금 만든 선을 기억 상자(Stack)에 맨 위로 밀어 넣음
+        // 방금 만든 선을 Stack에 push
         drawnLines.Push(lineGo);
 
         currentLine = lineGo.GetComponent<LineRenderer>();
@@ -69,7 +66,7 @@ public class UIDrawer : MonoBehaviour
     {
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = zDepth;
-        Vector3 worldPos = mainCam.ScreenToWorldPoint(mousePos);
+        Vector3 worldPos = drawCam.ScreenToWorldPoint(mousePos);
 
         if (currentLine.positionCount > 0)
         {
@@ -84,10 +81,10 @@ public class UIDrawer : MonoBehaviour
     // 뒤로 가기(Undo) 실행 함수
     public void UndoLastLine()
     {
-        // 상자 안에 기억해둔 선이 하나라도 있다면?
+        // 그린 적이 한 번이라도 있다면
         if (drawnLines.Count > 0)
         {
-            // 맨 위에 있는(가장 마지막에 그린) 선을 꺼냄
+            // 가장 마지막에 그린 선을 꺼냄
             GameObject lastDrawnLine = drawnLines.Pop();
 
             // 만약 지금 그리고 있던 선을 취소하는 거라면, 참조를 끊어줌 (버그 방지)
