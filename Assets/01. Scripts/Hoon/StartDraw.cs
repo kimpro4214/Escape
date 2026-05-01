@@ -15,17 +15,9 @@ public class StartDraw : MonoBehaviour, IInteractable
     [Header("플레이어 오브젝트")]
     public GameObject playerOjbect;
 
-    public GameObject drawingUI;
-
     // 현재 그리기 모드인지 상태 저장
     private bool isDrawingMode = false;
 
-    private void Start()
-    {
-        // 시작할 때 드로잉 카메라와 UI off.
-        if (puzzleCamera != null) puzzleCamera.gameObject.SetActive(false);
-        if (drawingUI != null) drawingUI.SetActive(false);
-    }
 
     public void OnInteract()
     {
@@ -43,8 +35,6 @@ public class StartDraw : MonoBehaviour, IInteractable
         if (playerCamera != null) playerCamera.gameObject.SetActive(false);
         if (puzzleCamera != null) puzzleCamera.gameObject.SetActive(true);
 
-        // 그리기 UI 켜기
-        if (drawingUI != null) drawingUI.SetActive(true);
 
         // 커서 상태 변경
         Cursor.lockState = CursorLockMode.None;
@@ -62,9 +52,6 @@ public class StartDraw : MonoBehaviour, IInteractable
         // 카메라 스위칭 복구
         if (puzzleCamera != null) puzzleCamera.gameObject.SetActive(false);
         if (playerCamera != null) playerCamera.gameObject.SetActive(true);
-
-        // 그리기 UI 끄기
-        if (drawingUI != null) drawingUI.SetActive(false);
 
         // 커서 상태 복구 (원래 상태로)
         Cursor.lockState = CursorLockMode.Locked;
