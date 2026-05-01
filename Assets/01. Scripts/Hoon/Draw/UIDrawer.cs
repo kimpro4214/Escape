@@ -15,10 +15,15 @@ public class UIDrawer : MonoBehaviour
     public Camera drawCam;
 
     private Stack<GameObject> drawnLines = new Stack<GameObject>();
+    private bool isActive = false;
 
+    public void Activate()   { isActive = true; }
+    public void Deactivate() { isActive = false; currentLine = null; }
 
     void Update()
     {
+        if (!isActive) return;
+
         //마우스 클릭 시작
         if (Input.GetMouseButtonDown(0))
         {

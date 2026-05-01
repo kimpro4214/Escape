@@ -1,27 +1,26 @@
 using UnityEngine;
 
-public class StartDraw : MonoBehaviour, IInteractable
+public class DrawManager : MonoBehaviour, IInteractable
 {
-    [Header("Ä«¸Ş¶ó ¼³Á¤")]
-    [Tooltip("ÇÃ·¹ÀÌ¾î°¡ Æò¼Ò¿¡ ¾²´Â ¸ŞÀÎ Ä«¸Ş¶ó (Player ¾ÈÀÇ Ä«¸Ş¶ó µî)")]
+    [Header("ì¹´ë©”ë¼ ì„¤ì •")]
+    [Tooltip("í”Œë ˆì´ì–´ ì”¬ì—ì„œ ì“°ëŠ” ì¼ë°˜ ì¹´ë©”ë¼ (Player ìì‹ ì¹´ë©”ë¼ ê²ƒ)")]
     public Camera playerCamera;
 
-    [Tooltip("±×¸²ÆÇÀ» ºñÃß´Â µå·ÎÀ× Àü¿ë Ä«¸Ş¶ó")]
+    [Tooltip("ê·¸ë¦¼ê·¸ë¦¬ê¸° í¼ì¦ì—ì„œ ì‚¬ìš©í•˜ëŠ” ì¹´ë©”ë¼")]
     public Camera puzzleCamera;
 
-    [Header("UI ¼³Á¤")]
-    [Tooltip("±×¸² ±×¸®±â ½Ã½ºÅÛÀ» ´ã´çÇÏ´Â Äµ¹ö½º³ª ¿ÀºêÁ§Æ® (¿É¼Ç)")]
-
-    [Header("ÇÃ·¹ÀÌ¾î ¿ÀºêÁ§Æ®")]
+    [Header("í”Œë ˆì´ì–´ ì˜¤ë¸Œì íŠ¸")]
     public GameObject playerOjbect;
 
-    // ÇöÀç ±×¸®±â ¸ğµåÀÎÁö »óÅÂ ÀúÀå
+    public UIDrawer uiDrawer;
+
+    // í˜„ì¬ ê·¸ë¦¼ê·¸ë¦¬ê¸° ëª¨ë“œì¸ì§€ ì—¬ë¶€
     private bool isDrawingMode = false;
 
 
     public void OnInteract()
     {
-        if (isDrawingMode) return; // ÀÌ¹Ì ±×¸®±â ¸ğµå¸é ¹«½Ã
+        if (isDrawingMode) return; // ì´ë¯¸ ê·¸ë¦¼ê·¸ë¦¬ê¸° ëª¨ë“œ ì¤‘
 
         EnterDrawingMode();
     }
@@ -31,32 +30,35 @@ public class StartDraw : MonoBehaviour, IInteractable
         isDrawingMode = true;
         playerOjbect.SetActive(false);
 
-        // Ä«¸Ş¶ó ½ºÀ§Äª
+        // ì¹´ë©”ë¼ ì „í™˜
         if (playerCamera != null) playerCamera.gameObject.SetActive(false);
         if (puzzleCamera != null) puzzleCamera.gameObject.SetActive(true);
 
-
-        // Ä¿¼­ »óÅÂ º¯°æ
+        // ì»¤ì„œ ë³´ì„ ì„¤ì •
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        Debug.Log("±×¸² ±×¸®±â ¸ğµå ÁøÀÔ");
+        if (uiDrawer != null) uiDrawer.Activate();
+
+        Debug.Log("ê·¸ë¦¼ ê·¸ë¦¬ê¸° ëª¨ë“œ ì§„ì…");
     }
 
-    // ³ªÁß¿¡ ±×¸®±â ¸ğµå¿¡¼­ ³ª°¥ ¶§ ºÎ¸¦ ÇÔ¼ö
+    // ë‚˜ì¤‘ì— ê·¸ë¦¼ê·¸ë¦¬ê¸° ëª¨ë“œì—ì„œ ë‚˜ì˜¬ ë•Œ ë¶€ë¥´ëŠ” í•¨ìˆ˜
     public void ExitDrawingMode()
     {
         isDrawingMode = false;
         playerOjbect.SetActive(true);
 
-        // Ä«¸Ş¶ó ½ºÀ§Äª º¹±¸
+        // ì¹´ë©”ë¼ ì „í™˜ ë³µêµ¬
         if (puzzleCamera != null) puzzleCamera.gameObject.SetActive(false);
         if (playerCamera != null) playerCamera.gameObject.SetActive(true);
 
-        // Ä¿¼­ »óÅÂ º¹±¸ (¿ø·¡ »óÅÂ·Î)
+        // ì»¤ì„œ ì›ë˜ ìƒíƒœ ë³µêµ¬ (ì ê¸ˆ ìƒíƒœë¡œ)
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        Debug.Log("±×¸² ±×¸®±â ¸ğµå Á¾·á");
+        if (uiDrawer != null) uiDrawer.Deactivate();
+
+        Debug.Log("ê·¸ë¦¼ ê·¸ë¦¬ê¸° ëª¨ë“œ ì¢…ë£Œ");
     }
 }

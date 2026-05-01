@@ -1,14 +1,14 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class MannequinPoser : MonoBehaviour
 {
-    [Header("Settings")]
     [Header("Camera")]
     public Camera targetCamera;
 
-    
-public float rotationSpeed = 0.3f;
+    [Header("Settings")]
+    public float rotationSpeed = 0.3f;
     public float selectionPixelRadius = 40f;
 
     [Header("Keyboard Rotation")]
@@ -21,6 +21,9 @@ public float rotationSpeed = 0.3f;
     Vector3 lastMousePos;
     bool isDraggingBody;
 
+    RectTransform highlightDot;
+    bool isActive = false;
+
     Stack<(Transform bone, Quaternion rotation)> undoStack = new Stack<(Transform, Quaternion)>();
 
     Quaternion initialRotation;
@@ -29,7 +32,7 @@ public float rotationSpeed = 0.3f;
     Vector3 initialPosition;
     Vector3 bodyCenter;
 
-void Start()
+    void Start()
     {
         var animator = GetComponent<Animator>();
         if (animator) animator.enabled = false;
@@ -61,8 +64,70 @@ void Start()
                 initialBoneRotations[bone] = bone.localRotation;
     }
 
-void Update()
+    public void Activate()
     {
+        isActive = true;
+        CreateHighlightDot();
+    }
+
+    public void Deactivate()
+    {
+        isActive = false;
+        selectedBone = null;
+        isDraggingBody = false;
+
+        if (highlightDot != null)
+        {
+            Destroy(highlightDot.transform.parent.gameObject);
+            highlightDot = null;
+        }
+    }
+
+    void CreateHighlightDot()
+    {
+        var canvasGO = new GameObject("_BoneHighlightCanvas");
+        var canvas = canvasGO.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 100;
+        canvasGO.AddComponent<CanvasScaler>();
+        canvasGO.AddComponent<GraphicRaycaster>();
+
+        var dotGO = new GameObject("_Dot");
+        dotGO.transform.SetParent(canvasGO.transform, false);
+
+        var image = dotGO.AddComponent<Image>();
+        image.sprite = CreateCircleSprite(64);
+        image.color = new Color(1f, 0.1f, 0.1f, 0.85f);
+
+        highlightDot = dotGO.GetComponent<RectTransform>();
+        highlightDot.sizeDelta = new Vector2(24f, 24f);
+        highlightDot.anchorMin = Vector2.zero;
+        highlightDot.anchorMax = Vector2.zero;
+        highlightDot.pivot = new Vector2(0.5f, 0.5f);
+
+        dotGO.SetActive(false);
+    }
+
+    Sprite CreateCircleSprite(int size)
+    {
+        var tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
+        float center = size * 0.5f;
+        float r = center - 1f;
+        for (int y = 0; y < size; y++)
+        for (int x = 0; x < size; x++)
+        {
+            float dist = Vector2.Distance(new Vector2(x, y), new Vector2(center, center));
+            float alpha = Mathf.Clamp01((r - dist) * 2f);
+            tex.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
+        }
+        tex.Apply();
+        return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f));
+    }
+
+    void Update()
+    {
+        if (!isActive) return;
+
         if (Input.GetMouseButtonDown(0))
             TrySelectBone();
 
@@ -86,14 +151,13 @@ void Update()
         {
             var (bone, rot) = undoStack.Pop();
             bone.localRotation = rot;
-            Debug.Log($"[Mannequin] 언두: {bone.name} (남은 스택: {undoStack.Count})");
         }
 
         if (Input.GetKeyDown(KeyCode.X))
         {
             transform.localRotation = initialRotation;
             transform.localPosition = initialPosition;
-            Debug.Log("[Mannequin] 전체 회전/위치 초기화");
+            Debug.Log("전체 회전/위치 초기화");
         }
 
         if (Input.GetKeyDown(KeyCode.C))
@@ -103,14 +167,39 @@ void Update()
             foreach (var pair in initialBoneRotations)
                 pair.Key.localRotation = pair.Value;
             undoStack.Clear();
-            Debug.Log("[Mannequin] 포즈 전체 초기화");
+            Debug.Log("포즈 전체 초기화");
         }
 
         if (Input.GetMouseButtonDown(1))
             selectedBone = null;
+
+        UpdateHighlightDot();
     }
 
-void TrySelectBone()
+    void UpdateHighlightDot()
+    {
+        if (highlightDot == null) return;
+
+        if (selectedBone != null)
+        {
+            Vector3 screenPos = targetCamera.WorldToScreenPoint(selectedBone.position);
+            if (screenPos.z > 0)
+            {
+                highlightDot.gameObject.SetActive(true);
+                highlightDot.anchoredPosition = new Vector2(screenPos.x, screenPos.y);
+            }
+            else
+            {
+                highlightDot.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            highlightDot.gameObject.SetActive(false);
+        }
+    }
+
+    void TrySelectBone()
     {
         Transform closest = null;
         float minDist = selectionPixelRadius;
@@ -140,7 +229,6 @@ void TrySelectBone()
             undoStack.Push((closest, closest.localRotation));
             selectedBone = closest;
             isDraggingBody = false;
-            Debug.Log($"[Mannequin] 선택: {selectedBone.name} (스택: {undoStack.Count})");
         }
         else
         {
@@ -152,7 +240,7 @@ void TrySelectBone()
         lastMousePos = Input.mousePosition;
     }
 
-void RotateSelectedBone()
+    void RotateSelectedBone()
     {
         Vector3 delta = Input.mousePosition - lastMousePos;
         lastMousePos = Input.mousePosition;
@@ -164,7 +252,7 @@ void RotateSelectedBone()
         selectedBone.Rotate(cam.right,  delta.y * rotationSpeed, Space.World);
     }
 
-void RotateBody()
+    void RotateBody()
     {
         Vector3 delta = Input.mousePosition - lastMousePos;
         lastMousePos = Input.mousePosition;
