@@ -2,6 +2,7 @@ using UnityEngine;
 
 public enum ESubtitleCharacters
 {
+     None,
      witch,
      magicHat
 }

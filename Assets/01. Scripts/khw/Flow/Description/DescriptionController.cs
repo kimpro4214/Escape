@@ -2,47 +2,65 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
+[RequireComponent(typeof(CanvasGroup))]
 public class DescriptionController : MonoBehaviour
 {
-    TextMeshProUGUI subtitleText;
+    private TextMeshProUGUI descriptionText;
+    private CanvasGroup canvasGroup;
 
     private void Awake()
     {
-        subtitleText ??= GetComponentInChildren<DescriptionText>().GetComponent<TextMeshProUGUI>();
+        // 텍스트 컴포넌트 캐싱
+        descriptionText ??= GetComponentInChildren<DescriptionText>().GetComponent<TextMeshProUGUI>();
+
+        // CanvasGroup 캐싱
+        canvasGroup = GetComponent<CanvasGroup>();
+
+        // 초기 상태: 숨김
+        UnDisplayDescription();
     }
 
     public void ShowDescription(string descText, float postDelay)
     {
-        UnDisplayDescription();
-
+        // 진행 중인 연출 중지 (중복 실행 방지)
         StopAllCoroutines();
 
+        // 텍스트 설정
         SetText(descText);
 
+        // 연출 시작
         StartCoroutine(DescriptionShowCoroutine(postDelay));
     }
 
-    #region utilities
+    #region UI Control Logic
 
     private void DisplayDescription()
     {
-        gameObject.SetActive(true);
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
+        canvasGroup.interactable = true;
     }
 
     private void UnDisplayDescription()
     {
-        gameObject.SetActive(false);
+        canvasGroup.alpha = 0f;
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.interactable = false;
     }
 
     private void SetText(string text)
     {
-        subtitleText.text = $"{text}";
+        if (descriptionText != null)
+        {
+            descriptionText.text = text;
+        }
     }
 
     IEnumerator DescriptionShowCoroutine(float delay)
     {
         DisplayDescription();
 
+        // postDelay 동안 화면에 유지
         yield return new WaitForSeconds(delay);
 
         UnDisplayDescription();

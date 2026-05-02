@@ -70,8 +70,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0e334957f86de204b91aca8d535de908, type: 2}
+  m_sharedMaterial: {fileID: 461979192429050871, guid: 0e334957f86de204b91aca8d535de908, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -177,7 +177,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2033892032298359003}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -211,6 +211,7 @@ GameObject:
   - component: {fileID: 3595847693223412725}
   - component: {fileID: 9214368277542507986}
   - component: {fileID: 7332185972721659373}
+  - component: {fileID: 4202060733359204972}
   m_Layer: 0
   m_Name: subtitle
   m_TagString: Untagged
@@ -328,6 +329,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9973bd7f100166498a638fcc35f0e63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SubtitleController
+--- !u!225 &4202060733359204972
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3471142053913896306}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7305310430526070914
 GameObject:
   m_ObjectHideFlags: 0
