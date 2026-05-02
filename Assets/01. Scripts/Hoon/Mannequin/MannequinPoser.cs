@@ -166,7 +166,6 @@ public class MannequinPoser : MonoBehaviour
             transform.localPosition = initialPosition;
             foreach (var pair in initialBoneRotations)
                 pair.Key.localRotation = pair.Value;
-            undoStack.Clear();
             Debug.Log("포즈 전체 초기화");
         }
 

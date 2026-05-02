@@ -9,17 +9,25 @@ public class MannequinCapturer : MonoBehaviour
     public int height = 1080;
     public string savePath = "Assets/Captures/capture.png";
 
-    // ★ 추가된 부분: 인스펙터에서 캡처할 레이어를 선택하세요.
+    // 인스펙터에서 캡처할 레이어를 선택
     [Header("Layer Settings")]
     public LayerMask captureMask;
 
+    [Header("마네킹 매니저 인스턴스")]
+    MannequinManager mannequinManager;
     bool isActive = false;
+
+    private void Awake()
+    {
+        mannequinManager = FindAnyObjectByType<MannequinManager>();
+    }
 
     public void Activate() => isActive = true;
     public void Deactivate() => isActive = false;
 
     void Update()
     {
+        Destroy(FindAnyObjectByType<MannequinManager>().gameObject);
         if (!isActive) return;
         if (!Input.GetMouseButtonDown(0)) return;
 
@@ -71,5 +79,6 @@ public class MannequinCapturer : MonoBehaviour
         File.WriteAllBytes(path, tex.EncodeToPNG());
         Destroy(tex);
         Debug.Log($"[MannequinCapturer] 특정 레이어({captureMask.value}) 캡처 완료: {path}");
+        mannequinManager.MannequinSubmit();
     }
 }

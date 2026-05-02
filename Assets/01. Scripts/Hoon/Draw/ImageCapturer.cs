@@ -72,6 +72,6 @@ public class ImageCapturer : MonoBehaviour
         byte[] bytes = screenShot.EncodeToPNG();
         File.WriteAllBytes(fullPath, bytes);
 
-        Debug.Log($"캡처 성공! 경로: {fullPath}");
+        Debug.Log($"캡처 성공 경로: {fullPath}");
     }
 }

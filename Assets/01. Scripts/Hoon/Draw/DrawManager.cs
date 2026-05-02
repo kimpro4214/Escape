@@ -14,13 +14,14 @@ public class DrawManager : MonoBehaviour, IInteractable
 
     public UIDrawer uiDrawer;
 
-    // 현재 그림그리기 모드인지 여부
-    private bool isDrawingMode = false;
+    [Header("Interaction Control")]
+    public bool canInteract = true;
 
+    private bool isDrawingMode = false;
 
     public void OnInteract()
     {
-        if (isDrawingMode) return; // 이미 그림그리기 모드 중
+        if (!canInteract || isDrawingMode) return;
 
         EnterDrawingMode();
     }
@@ -61,4 +62,18 @@ public class DrawManager : MonoBehaviour, IInteractable
 
         Debug.Log("그림 그리기 모드 종료");
     }
+
+    public void DrawDestroy()
+    {
+        if (isDrawingMode) ExitDrawingMode();
+        transform.parent.gameObject.SetActive(false);
+    }
+
+    public void DrawSubmit()
+    {
+        ExitDrawingMode();
+        canInteract = false;
+    }
+
+    public void DrawEnable() => canInteract = true;
 }

@@ -1,7 +1,9 @@
+using System.Collections;
 using UnityEngine;
 
 public class MannequinManager : MonoBehaviour, IInteractable
 {
+
     [Header("Cameras")]
     public Camera playerCamera;
     public Camera mannequinCamera;   // 위치/방향 기준점으로만 사용
@@ -13,6 +15,9 @@ public class MannequinManager : MonoBehaviour, IInteractable
     [Header("Player")]
     public GameObject player;
 
+    [Header("Interaction Control")]
+    public bool canInteract = true;
+
     bool isInteracting = false;
     CursorLockMode originalLockState;
     bool originalCursorVisible;
@@ -21,10 +26,9 @@ public class MannequinManager : MonoBehaviour, IInteractable
     Vector3    savedPosition;
     Quaternion savedRotation;
     Transform  savedParent;
-
     public void OnInteract()
     {
-        if (isInteracting) return;
+        if (!canInteract || isInteracting) return;
 
         // 커서 상태 저장
         originalLockState     = Cursor.lockState;
@@ -57,10 +61,22 @@ public class MannequinManager : MonoBehaviour, IInteractable
     void Update()
     {
         if (isInteracting && Input.GetKeyDown(KeyCode.Escape))
-            Exit();
+            MannequinExit();
     }
 
-    void Exit()
+    public void MannequinDestroy()
+    { // 플레이어 시점으로 돌아간 후 마네킹 오브젝트 전체 비활성화. 여기에 파티클 넣어도 됨.
+        if (isInteracting) MannequinExit();
+        transform.parent.gameObject.SetActive(false);
+    }
+    public void MannequinSubmit()
+    {
+        MannequinExit();
+        canInteract = false;
+    }
+    public void MannequinEnable() => canInteract = true;
+
+    public void MannequinExit()
     {
         // 메인 카메라 원래 위치/방향 복구
         playerCamera.transform.SetParent(savedParent);
