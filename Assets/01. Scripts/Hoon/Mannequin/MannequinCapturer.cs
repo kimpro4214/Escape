@@ -27,7 +27,6 @@ public class MannequinCapturer : MonoBehaviour
 
     void Update()
     {
-        Destroy(FindAnyObjectByType<MannequinManager>().gameObject);
         if (!isActive) return;
         if (!Input.GetMouseButtonDown(0)) return;
 
