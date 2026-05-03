@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29ed5882db5bb1046a2b6516252342c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DescriptionManager
+  descriptionController: {fileID: 0}
 --- !u!1 &6382580894489485190
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,6 +162,7 @@ GameObject:
   - component: {fileID: 7863863225936184338}
   - component: {fileID: 5704175200212707340}
   - component: {fileID: 2050725911329913937}
+  - component: {fileID: 9019952719915568150}
   m_Layer: 0
   m_Name: Description
   m_TagString: Untagged
@@ -252,6 +254,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
   m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!225 &9019952719915568150
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6382580894489485190}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7009523426797409607
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,8 +335,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Text?
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0e334957f86de204b91aca8d535de908, type: 2}
-  m_sharedMaterial: {fileID: 461979192429050871, guid: 0e334957f86de204b91aca8d535de908, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: daa9224f10805724bb8e51e5b07e9469, type: 2}
+  m_sharedMaterial: {fileID: 461979192429050871, guid: daa9224f10805724bb8e51e5b07e9469, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -346,13 +360,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 55
+  m_fontSizeBase: 55
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 2
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535

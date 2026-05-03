@@ -28,7 +28,7 @@ public class GameStartStep : ProgressStepBase
 
     public override void OnExitProgress()
     {
-        FlowManager.Instance.StartFlow(new Flow_DoorClose(door));
+        new Flow_DoorClose(door).StartFlow();
     }
 
     public override void OnUpdateProgress()
