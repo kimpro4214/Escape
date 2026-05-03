@@ -20,11 +20,19 @@ public class MannequinPoser : MonoBehaviour
     Transform selectedBone;
     Vector3 lastMousePos;
     bool isDraggingBody;
+    Vector3    bodyDragStartPosition;
+    Quaternion bodyDragStartRotation;
+
 
     RectTransform highlightDot;
     bool isActive = false;
 
-    Stack<(Transform bone, Quaternion rotation)> undoStack = new Stack<(Transform, Quaternion)>();
+    abstract class UndoEntry { }
+    class BoneUndo : UndoEntry { public Transform bone; public Quaternion rotation; }
+    class ResetUndo : UndoEntry { public Quaternion bodyRotation; public Vector3 bodyPosition; public Dictionary<Transform, Quaternion> snapshot; }
+    class BodyUndo  : UndoEntry { public Quaternion bodyRotation; public Vector3 bodyPosition; }
+
+    Stack<UndoEntry> undoStack = new Stack<UndoEntry>();
 
     Quaternion initialRotation;
     Dictionary<Transform, Quaternion> initialBoneRotations = new Dictionary<Transform, Quaternion>();
@@ -124,7 +132,7 @@ public class MannequinPoser : MonoBehaviour
         return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f));
     }
 
-    void Update()
+void Update()
     {
         if (!isActive) return;
 
@@ -140,7 +148,11 @@ public class MannequinPoser : MonoBehaviour
         }
 
         if (Input.GetMouseButtonUp(0))
+        {
+            if (isDraggingBody && transform.localRotation != bodyDragStartRotation)
+                undoStack.Push(new BodyUndo { bodyRotation = bodyDragStartRotation, bodyPosition = bodyDragStartPosition });
             isDraggingBody = false;
+        }
 
         if (selectedBone != null)
             KeyboardRotate();
@@ -149,8 +161,21 @@ public class MannequinPoser : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Z) && !Input.GetKey(KeyCode.LeftControl) && undoStack.Count > 0)
         {
-            var (bone, rot) = undoStack.Pop();
-            bone.localRotation = rot;
+            var entry = undoStack.Pop();
+            if (entry is BoneUndo b)
+                b.bone.localRotation = b.rotation;
+            else if (entry is BodyUndo bo)
+            {
+                transform.localRotation = bo.bodyRotation;
+                transform.localPosition = bo.bodyPosition;
+            }
+            else if (entry is ResetUndo r)
+            {
+                transform.localRotation = r.bodyRotation;
+                transform.localPosition = r.bodyPosition;
+                foreach (var pair in r.snapshot)
+                    pair.Key.localRotation = pair.Value;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.X))
@@ -162,6 +187,11 @@ public class MannequinPoser : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.C))
         {
+            var snapshot = new Dictionary<Transform, Quaternion>();
+            foreach (var pair in initialBoneRotations)
+                snapshot[pair.Key] = pair.Key.localRotation;
+            undoStack.Push(new ResetUndo { bodyRotation = transform.localRotation, bodyPosition = transform.localPosition, snapshot = snapshot });
+
             transform.localRotation = initialRotation;
             transform.localPosition = initialPosition;
             foreach (var pair in initialBoneRotations)
@@ -198,7 +228,7 @@ public class MannequinPoser : MonoBehaviour
         }
     }
 
-    void TrySelectBone()
+void TrySelectBone()
     {
         Transform closest = null;
         float minDist = selectionPixelRadius;
@@ -225,7 +255,7 @@ public class MannequinPoser : MonoBehaviour
 
         if (closest != null)
         {
-            undoStack.Push((closest, closest.localRotation));
+            undoStack.Push(new BoneUndo { bone = closest, rotation = closest.localRotation });
             selectedBone = closest;
             isDraggingBody = false;
         }
@@ -233,7 +263,8 @@ public class MannequinPoser : MonoBehaviour
         {
             selectedBone = null;
             isDraggingBody = true;
-            // 몸체 드래그는 RotateAround로 위치도 바뀌므로 언두 스택에 쌓지 않음
+            bodyDragStartPosition = transform.localPosition;
+            bodyDragStartRotation = transform.localRotation;
         }
 
         lastMousePos = Input.mousePosition;
@@ -262,7 +293,7 @@ public class MannequinPoser : MonoBehaviour
         transform.RotateAround(bodyCenter, targetCamera.transform.right, delta.y * rotationSpeed);
     }
 
-    void KeyboardRotate()
+void KeyboardRotate()
     {
         float step = keyboardSpeed * Time.deltaTime;
         Vector3 axis = Vector3.zero;
@@ -282,14 +313,22 @@ public class MannequinPoser : MonoBehaviour
             Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.E);
 
         if (isFirstPress)
-            undoStack.Push((selectedBone, selectedBone.localRotation));
+            undoStack.Push(new BoneUndo { bone = selectedBone, rotation = selectedBone.localRotation });
 
         selectedBone.Rotate(axis, Space.Self);
     }
 
-    void KeyboardRotateBody()
+void KeyboardRotateBody()
     {
         float step = keyboardSpeed * Time.deltaTime;
+
+        bool isFirstPress =
+            Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D) ||
+            Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) ||
+            Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.E);
+
+        if (isFirstPress)
+            undoStack.Push(new BodyUndo { bodyRotation = transform.localRotation, bodyPosition = transform.localPosition });
 
         if (Input.GetKey(KeyCode.A)) transform.RotateAround(bodyCenter, Vector3.up,    -step);
         if (Input.GetKey(KeyCode.D)) transform.RotateAround(bodyCenter, Vector3.up,     step);

@@ -19,7 +19,7 @@ public class MannequinCapturer : MonoBehaviour
 
     private void Awake()
     {
-        mannequinManager = FindAnyObjectByType<MannequinManager>();
+        mannequinManager = transform.parent.GetComponentInChildren<MannequinManager>();
     }
 
     public void Activate() => isActive = true;

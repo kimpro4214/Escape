@@ -93,4 +93,15 @@ public class MannequinManager : MonoBehaviour, IInteractable
 
         isInteracting = false;
     }
+
+
+void Start()
+    {
+        var pm = FindAnyObjectByType<PlayerMovement>();
+        if (pm != null)
+        {
+            player        = pm.gameObject;
+            playerCamera  = pm.GetComponentInChildren<Camera>();
+        }
+    }
 }
