@@ -100,8 +100,12 @@ void Start()
         var pm = FindAnyObjectByType<PlayerMovement>();
         if (pm != null)
         {
-            player        = pm.gameObject;
-            playerCamera  = pm.GetComponentInChildren<Camera>();
+            player       = pm.gameObject;
+            playerCamera = pm.GetComponentInChildren<Camera>();
+        }
+        else
+        {
+            Debug.LogWarning("[MannequinManager] PlayerMovement를 가진 오브젝트를 찾지 못했습니다.");
         }
     }
 }

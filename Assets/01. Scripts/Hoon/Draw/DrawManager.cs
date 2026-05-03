@@ -3,14 +3,11 @@ using UnityEngine;
 public class DrawManager : MonoBehaviour, IInteractable
 {
     [Header("카메라 설정")]
-    [Tooltip("플레이어 씬에서 쓰는 일반 카메라 (Player 자식 카메라 것)")]
-    public Camera playerCamera;
-
     [Tooltip("그림그리기 퍼즐에서 사용하는 카메라")]
     public Camera puzzleCamera;
 
-    [Header("플레이어 오브젝트")]
-    public GameObject playerOjbect;
+    private Camera playerCamera;
+    private GameObject playerOjbect;
 
     public UIDrawer uiDrawer;
 
@@ -76,4 +73,19 @@ public class DrawManager : MonoBehaviour, IInteractable
     }
 
     public void DrawEnable() => canInteract = true;
+
+
+private void Awake()
+    {
+        PlayerMovement player = FindFirstObjectByType<PlayerMovement>();
+        if (player != null)
+        {
+            playerOjbect = player.gameObject;
+            playerCamera = player.GetComponentInChildren<Camera>(true);
+        }
+        else
+        {
+            Debug.LogWarning("[DrawManager] PlayerMovement를 가진 오브젝트를 찾지 못했습니다.");
+        }
+    }
 }

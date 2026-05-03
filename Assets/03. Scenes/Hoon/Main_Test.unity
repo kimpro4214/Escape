@@ -127,22 +127,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4530560824728103107, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: m_Depth
-      value: -0.08
-      objectReference: {fileID: 0}
-    - target: {fileID: 4530560824728103107, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4530560824728103107, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4530560824728103107, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4752815730794505303, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
       propertyPath: m_Name
       value: Draw_System
@@ -187,22 +171,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5727828360629059656, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8044422884698954202, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: uiDrawer
-      value: 
-      objectReference: {fileID: 2134789180}
-    - target: {fileID: 8044422884698954202, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: playerCamera
-      value: 
-      objectReference: {fileID: 1736819537}
-    - target: {fileID: 8044422884698954202, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: playerOjbect
-      value: 
-      objectReference: {fileID: 1587200453}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2102,17 +2070,6 @@ Transform:
   - {fileID: 1471080142}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2134789180 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5351626576501605271, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-  m_PrefabInstance: {fileID: 232471385}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97dd3885591b08841ab82a50da88346e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MouseDraw
 --- !u!1 &1398411290681173
 GameObject:
   m_ObjectHideFlags: 0
