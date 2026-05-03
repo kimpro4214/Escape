@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class FirstStep : ProgressStepBase
+public class SecondRoomStep : ProgressStepBase
 {
     public override void OnEnterProgress()
     {
-        
+
     }
 }

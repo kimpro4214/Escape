@@ -13,7 +13,8 @@ public class Progress_Door : MonoBehaviour, IProgressExecuter
 
     public void CloseDoor()
     {
-
+        animator.SetTrigger("Close");
+        doorOpenSource.Play();
     }
 
     public void OpenDoor()
