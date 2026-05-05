@@ -2,20 +2,41 @@ using UnityEngine;
 
 public class DrawManager : MonoBehaviour, IInteractable
 {
+    public static DrawManager Instance;
+
     [Header("카메라 설정")]
     [Tooltip("그림그리기 퍼즐에서 사용하는 카메라")]
-    public Camera puzzleCamera;
+    public Camera drawCamera;
 
+    [Header("파괴 파티클")]
+    public GameObject destroyParticle;
+    
     private Camera playerCamera;
     private GameObject playerOjbect;
 
-    public UIDrawer uiDrawer;
+    public DrawSystem uiDrawer;
 
-    [Header("Interaction Control")]
     public bool canInteract = true;
+
 
     private bool isDrawingMode = false;
 
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+
+        PlayerMovement player = FindFirstObjectByType<PlayerMovement>();
+        if (player != null)
+        {
+            playerOjbect = player.gameObject;
+            playerCamera = player.GetComponentInChildren<Camera>(true);
+        }
+        else
+        {
+            Debug.LogWarning("[DrawManager] PlayerMovement를 가진 오브젝트를 찾지 못했습니다.");
+        }
+        drawCamera.gameObject.SetActive(false);
+    }
     public void OnInteract()
     {
         if (!canInteract || isDrawingMode) return;
@@ -25,12 +46,13 @@ public class DrawManager : MonoBehaviour, IInteractable
 
     private void EnterDrawingMode()
     {
+        drawCamera.gameObject.SetActive(true);
         isDrawingMode = true;
         playerOjbect.SetActive(false);
 
         // 카메라 전환
         if (playerCamera != null) playerCamera.gameObject.SetActive(false);
-        if (puzzleCamera != null) puzzleCamera.gameObject.SetActive(true);
+        if (drawCamera != null) drawCamera.gameObject.SetActive(true);
 
         // 커서 보임 설정
         Cursor.lockState = CursorLockMode.None;
@@ -46,9 +68,10 @@ public class DrawManager : MonoBehaviour, IInteractable
     {
         isDrawingMode = false;
         playerOjbect.SetActive(true);
+        drawCamera.gameObject.SetActive(false);
 
         // 카메라 전환 복구
-        if (puzzleCamera != null) puzzleCamera.gameObject.SetActive(false);
+        if (drawCamera != null) drawCamera.gameObject.SetActive(false);
         if (playerCamera != null) playerCamera.gameObject.SetActive(true);
 
         // 커서 원래 상태 복구 (잠금 상태로)
@@ -63,6 +86,7 @@ public class DrawManager : MonoBehaviour, IInteractable
     public void DrawDestroy()
     {
         if (isDrawingMode) ExitDrawingMode();
+        Destroy(Instantiate(destroyParticle, transform.position, transform.rotation), 2f);
         transform.parent.gameObject.SetActive(false);
     }
 
@@ -74,18 +98,4 @@ public class DrawManager : MonoBehaviour, IInteractable
 
     public void DrawEnable() => canInteract = true;
 
-
-private void Awake()
-    {
-        PlayerMovement player = FindFirstObjectByType<PlayerMovement>();
-        if (player != null)
-        {
-            playerOjbect = player.gameObject;
-            playerCamera = player.GetComponentInChildren<Camera>(true);
-        }
-        else
-        {
-            Debug.LogWarning("[DrawManager] PlayerMovement를 가진 오브젝트를 찾지 못했습니다.");
-        }
-    }
 }

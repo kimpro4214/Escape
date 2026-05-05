@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.IO;
 
-public class ImageCapturer : MonoBehaviour
+public class DrawCapturer : MonoBehaviour
 {
     [Header("연결")]
     public Camera puzzleCamera;
@@ -51,5 +51,7 @@ private IEnumerator CaptureRoutine()
         File.WriteAllBytes(fullPath, bytes);
 
         Debug.Log($"캡처 성공 경로: {fullPath}");
+
+        DrawManager.Instance.DrawDestroy();
     }
 }

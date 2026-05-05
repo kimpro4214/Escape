@@ -66,7 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1cd30269cca10c40b7e7078dbc49aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StartDraw
-  puzzleCamera: {fileID: 4530560824728103107}
+  drawCamera: {fileID: 4530560824728103107}
   uiDrawer: {fileID: 5351626576501605271}
   canInteract: 1
 --- !u!1 &1027926044125315656
@@ -636,7 +636,7 @@ GameObject:
   - component: {fileID: 3924120299442081442}
   m_Layer: 0
   m_Name: Camera_Draw
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

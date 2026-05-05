@@ -330,8 +330,8 @@ Transform:
   m_GameObject: {fileID: 2509426505178152673}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.798, y: -0.54, z: -0.31799972}
-  m_LocalScale: {x: 0.63761, y: 0.63761, z: 0.0145611}
+  m_LocalPosition: {x: 1.814, y: -0.54, z: -0.31799972}
+  m_LocalScale: {x: 0.45163193, y: 0.45163193, z: 0.010313919}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4058698113589065480}
@@ -661,7 +661,7 @@ Transform:
   m_GameObject: {fileID: 3463379752314259609}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.138}
+  m_LocalPosition: {x: -0.226, y: -0.34, z: -0.261}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -694,8 +694,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.6111298, y: 2.1595147, z: 1.0383577}
-  m_Center: {x: -0.050315857, y: -0.04200232, z: -0.019178867}
+  m_Size: {x: 1.6111298, y: 1.96475, z: 1.0383577}
+  m_Center: {x: -0.050315857, y: 0.4254831, z: -0.019178867}
 --- !u!114 &7266257308870521763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -713,6 +713,7 @@ MonoBehaviour:
   poser: {fileID: 2106383401307586464}
   capturer: {fileID: 8954168145014957987}
   player: {fileID: 0}
+  destroyParticle: {fileID: 2504214343621411470, guid: ff54b0d7c4c239943ba4018937ae1f56, type: 3}
   canInteract: 1
 --- !u!1 &4886890982270655648
 GameObject:

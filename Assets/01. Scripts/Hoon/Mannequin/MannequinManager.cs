@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class MannequinManager : MonoBehaviour, IInteractable
 {
+    public static MannequinManager Instance;
 
     [Header("Cameras")]
     public Camera playerCamera;
@@ -15,9 +16,10 @@ public class MannequinManager : MonoBehaviour, IInteractable
     [Header("Player")]
     public GameObject player;
 
-    [Header("Interaction Control")]
-    public bool canInteract = true;
+    [Header("파괴 파티클")]
+    public GameObject destroyParticle;
 
+    public bool canInteract = true;
     bool isInteracting = false;
     CursorLockMode originalLockState;
     bool originalCursorVisible;
@@ -26,10 +28,31 @@ public class MannequinManager : MonoBehaviour, IInteractable
     Vector3    savedPosition;
     Quaternion savedRotation;
     Transform  savedParent;
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        mannequinCamera.gameObject.SetActive(false);
+    }
+    void Start()
+    {
+        var pm = FindAnyObjectByType<PlayerMovement>();
+        if (pm != null)
+        {
+            player = pm.gameObject;
+            playerCamera = pm.GetComponentInChildren<Camera>();
+        }
+        else
+        {
+            Debug.LogWarning("[MannequinManager] PlayerMovement를 가진 오브젝트를 찾지 못했습니다.");
+        }
+    }
+
     public void OnInteract()
     {
         if (!canInteract || isInteracting) return;
 
+        mannequinCamera.gameObject.SetActive(true);
         // 커서 상태 저장
         originalLockState     = Cursor.lockState;
         originalCursorVisible = Cursor.visible;
@@ -65,7 +88,8 @@ public class MannequinManager : MonoBehaviour, IInteractable
     }
 
     public void MannequinDestroy()
-    { // 플레이어 시점으로 돌아간 후 마네킹 오브젝트 전체 비활성화. 여기에 파티클 넣어도 됨.
+    { // 플레이어 시점으로 돌아간 후 마네킹 오브젝트 전체 비활성화.
+        Destroy(Instantiate(destroyParticle, transform.position, transform.rotation), 2f);
         if (isInteracting) MannequinExit();
         transform.parent.gameObject.SetActive(false);
     }
@@ -83,6 +107,7 @@ public class MannequinManager : MonoBehaviour, IInteractable
         playerCamera.transform.SetPositionAndRotation(savedPosition, savedRotation);
 
         if (player != null) player.SetActive(true);
+        mannequinCamera.gameObject.SetActive(false);
 
         // 커서 복구
         Cursor.lockState = originalLockState;
@@ -92,20 +117,5 @@ public class MannequinManager : MonoBehaviour, IInteractable
         if (capturer != null) capturer.Deactivate();
 
         isInteracting = false;
-    }
-
-
-void Start()
-    {
-        var pm = FindAnyObjectByType<PlayerMovement>();
-        if (pm != null)
-        {
-            player       = pm.gameObject;
-            playerCamera = pm.GetComponentInChildren<Camera>();
-        }
-        else
-        {
-            Debug.LogWarning("[MannequinManager] PlayerMovement를 가진 오브젝트를 찾지 못했습니다.");
-        }
     }
 }

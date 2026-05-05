@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIDrawer : MonoBehaviour
+public class DrawSystem : MonoBehaviour
 {
     [Header("설정")]
     public RectTransform drawArea;
