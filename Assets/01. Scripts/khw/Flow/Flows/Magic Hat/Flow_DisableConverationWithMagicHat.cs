@@ -1,16 +1,14 @@
 using UnityEngine;
 
-public class Flow_DisableConverationWithMagicHat : MonoBehaviour
+public class Flow_DisableConverationWithMagicHat : IFlow
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void EndFlow()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public void StartFlow()
     {
-        
+        //마법모자와 대화할 수 있도록 한다.
     }
 }
