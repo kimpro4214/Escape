@@ -3,17 +3,13 @@ using UnityEngine.Networking;
 using System.Threading.Tasks;
 using System.Collections;
 
-/// <summary>
-/// 기존 시나리오/음성 로직과 완전 분리된 퍼즐 힌트 전용 스크립트
-/// 화면을 캡처 → GPT Vision으로 분석 → TTS로 힌트 읽어줌
-/// </summary>
 public class ScreenHintService : MonoBehaviour
 {
     [Header("OpenAI Vision 설정")]
-    [SerializeField] private ApiKeyConfig apiKeyConfig; // 인스펙터에서 연결
-    [SerializeField] private string model = "gpt-4o-mini";
+    [SerializeField] private ApiKeyConfig apiKeyConfig;
+    [SerializeField] private string model = "gpt-5.4"; 
 
-    [Header("퍼즐 힌트 전용 프롬프트 (puzzle_Hint)")]
+    [Header("퍼즐 힌트 전용 프롬프트")]
     [TextArea(4, 8)]
     [SerializeField]
     private string puzzle_Hint =
@@ -22,8 +18,16 @@ public class ScreenHintService : MonoBehaviour
         "플레이어가 막혀있을 것 같은 부분에 대해 " +
         "너무 직접적이지 않게 한 문장으로 힌트를 주세요.";
 
-    [Header("힌트 전용 TTS (기존 SupertoneTTS와 별개 보이스)")]
-    [SerializeField] private SupertoneTTS hintTTS; // 힌트 전용 SupertoneTTS 오브젝트 연결
+    [Header("TTS 설정")]
+    [SerializeField] private TTSType ttsType = TTSType.Supertone;
+    [SerializeField] private SupertoneTTS supertoneTTS;
+    [SerializeField] private OpenAITTS openAITTS;
+
+    public enum TTSType
+    {
+        Supertone,
+        OpenAI
+    }
 
     [Header("상태")]
     [SerializeField] private bool isProcessing = false;
@@ -32,40 +36,54 @@ public class ScreenHintService : MonoBehaviour
     [SerializeField] private ChatLogManager chatLogManager;
 
     [Header("자막 UI")]
-    [SerializeField] private SubtitleManager subtitleManager;
+    [SerializeField] private SubtitleController subtitleController;
 
-    // ─────────────────────────────────────────────
-    // 키보드 단축키 (H키)
-    // ─────────────────────────────────────────────
-    private void Update()
+    private async Task Speak(string text)
     {
-        if (Input.GetKeyDown(KeyCode.H) && !isProcessing)
+        switch (ttsType)
         {
-            StartCoroutine(CaptureAndHint());
+            case TTSType.Supertone:
+                if (supertoneTTS != null)
+                    await supertoneTTS.Speak(text);
+                else
+                    Debug.LogError("[ScreenHintService] SupertoneTTS가 연결되지 않았습니다.");
+                break;
+
+            case TTSType.OpenAI:
+                if (openAITTS != null)
+                    await openAITTS.Speak(text);
+                else
+                    Debug.LogError("[ScreenHintService] OpenAITTS가 연결되지 않았습니다.");
+                break;
         }
     }
 
-    // ─────────────────────────────────────────────
-    // UI 버튼 OnClick()에서 호출 가능
-    // ─────────────────────────────────────────────
+    // 런타임 TTS 전환 (UI 버튼 등에서 호출 가능)
+    public void SetTTSType(int index)
+    {
+        ttsType = (TTSType)index;
+        Debug.Log($"[ScreenHintService] TTS 변경: {ttsType}");
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.H) && !isProcessing)
+            StartCoroutine(CaptureAndHint());
+    }
+
     public void OnHintButtonClicked()
     {
         if (!isProcessing)
             StartCoroutine(CaptureAndHint());
     }
 
-    // ─────────────────────────────────────────────
-    // 메인 흐름: 캡처 → Vision → TTS
-    // ─────────────────────────────────────────────
     private IEnumerator CaptureAndHint()
     {
         isProcessing = true;
         Debug.Log("[ScreenHintService] 화면 캡처 중...");
 
-        // 렌더링 완료 후 캡처 (필수)
         yield return new WaitForEndOfFrame();
 
-        // 스크린샷 → Base64
         Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
         screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
         screenshot.Apply();
@@ -76,21 +94,19 @@ public class ScreenHintService : MonoBehaviour
 
         Debug.Log("[ScreenHintService] GPT Vision 분석 중...");
 
-        // GPT Vision 호출
         var visionTask = AskVision(base64Image);
         yield return new WaitUntil(() => visionTask.IsCompleted);
 
         string hintText = visionTask.Result;
 
         chatLogManager.AddLog("AI", hintText);
-        subtitleManager.ShowSubtitle("AI", hintText);
+        subtitleController.ShowSubtitle("AI", hintText, 5f);
 
         if (!string.IsNullOrEmpty(hintText))
         {
             Debug.Log($"[ScreenHintService] 힌트: {hintText}");
 
-            // 힌트 전용 TTS로 읽기 (기존 시나리오 TTS와 완전 분리)
-            var ttsTask = hintTTS.Speak(hintText);
+            var ttsTask = Speak(hintText);
             yield return new WaitUntil(() => ttsTask.IsCompleted);
         }
         else
@@ -101,12 +117,8 @@ public class ScreenHintService : MonoBehaviour
         isProcessing = false;
     }
 
-    // ─────────────────────────────────────────────
-    // GPT Vision API 호출 (puzzle_Hint 프롬프트 사용)
-    // ─────────────────────────────────────────────
     private async Task<string> AskVision(string base64Image)
     {
-        // Vision API는 중첩 구조라 JsonUtility 대신 수동 JSON 작성
         string jsonBody = $@"{{
             ""model"": ""{model}"",
             ""messages"": [
@@ -130,7 +142,7 @@ public class ScreenHintService : MonoBehaviour
                     ]
                 }}
             ],
-            ""max_tokens"": 150
+            ""max_completion_tokens"": 150
         }}";
 
         using (UnityWebRequest request = new UnityWebRequest(
@@ -151,15 +163,11 @@ public class ScreenHintService : MonoBehaviour
                 return null;
             }
 
-            // 기존 GPTService의 public 클래스 재사용
             var response = JsonUtility.FromJson<GPTService.GPTResponse>(request.downloadHandler.text);
             return response.choices[0].message.content.Trim();
         }
     }
 
-    // ─────────────────────────────────────────────
-    // JSON 이스케이프 유틸
-    // ─────────────────────────────────────────────
     private string EscapeJson(string s)
     {
         return s.Replace("\\", "\\\\")

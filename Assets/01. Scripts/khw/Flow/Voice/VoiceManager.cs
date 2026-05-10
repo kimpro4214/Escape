@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 [System.Serializable]
@@ -33,6 +34,10 @@ public class VoiceManager : MonoBehaviour
     private SubtitleController subtitle;
 
     private AudioSource currentLeadingSource; // 현재 재생 중인 오디오를 추적 (강제 중단용)
+
+    // TTS
+    [SerializeField] private OpenAITTS openAITTS;
+
 
     private void Awake()
     {
@@ -85,14 +90,27 @@ public class VoiceManager : MonoBehaviour
         while (voiceLineQueue.Count > 0)
         {
             VoiceLine currentLine = voiceLineQueue.Dequeue();
+            Debug.Log($"재생 시도 - 캐릭터: {currentLine.characterName}, 텍스트: {currentLine.subtitle}");
 
             // 1. 캐릭터 참조 얻어오기
             CharacterBase character = CharacterFinder.FindCharacter(currentLine.characterName);
+            Debug.Log($"캐릭터 찾기 결과: {(character == null ? "null" : character.name)}");
 
             if (character != null)
             {
                 // 2. 해당 캐릭터의 AudioSource 참조
                 currentLeadingSource = character.GetComponent<AudioSource>();
+
+                // TTS 생성 로직 추가
+                // clip null이면 캐릭터별 TTS로 생성
+                if (currentLine.clip == null && !string.IsNullOrEmpty(currentLine.subtitle))
+                {
+                    Debug.Log("TTS 호출 시작");
+                    var task = GetTTSClip(currentLine.characterName, currentLine.subtitle);
+                    yield return new WaitUntil(() => task.IsCompleted);
+                    currentLine.clip = task.Result;
+                    Debug.Log($"TTS 결과 clip: {(currentLine.clip == null ? "null" : "생성됨")}");
+                }
 
                 if (currentLeadingSource != null)
                 {
@@ -101,7 +119,9 @@ public class VoiceManager : MonoBehaviour
                 }
 
                 // 3. 자막 출력 (CharacterBase에 정의된 실제 이름을 사용하거나 함)
-                subtitle.ShowSubtitle(character.characterName, currentLine.subtitle, currentLine.postDelay);
+                // 잠시 비활성화
+                // --------------------------------------| 꼭 다시 활성화 하기 |--------------------------
+                //subtitle.ShowSubtitle(character.characterName, currentLine.subtitle, currentLine.postDelay);
 
                 // 4. 플로우 실행
                 if (currentLine.flows != null)
@@ -120,5 +140,18 @@ public class VoiceManager : MonoBehaviour
 
         currentLeadingSource = null;
         isPlaying = false;
+        Debug.Log("잘 꺼짐");
+    }
+
+    private async Task<AudioClip> GetTTSClip(ESubtitleCharacters charType, string text)
+    {
+        string voice = charType switch
+        {
+            ESubtitleCharacters.witch => "nova",
+            ESubtitleCharacters.magicHat => "onyx",
+            _ => null
+        };
+        return await openAITTS.GetClip(text, voice);
     }
 }
+

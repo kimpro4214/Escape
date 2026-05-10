@@ -24,7 +24,7 @@ public class OpenAITTS : MonoBehaviour
     /// </summary>
     public async Task Speak(string text)
     {
-        byte[] audioData = await CallTTSAPI(text);
+        byte[] audioData = await CallTTSAPI(text, voice);
 
         if (audioData == null || audioData.Length == 0)
         {
@@ -49,7 +49,7 @@ public class OpenAITTS : MonoBehaviour
     /// <summary>
     /// OpenAI TTS API 호출
     /// </summary>
-    private async Task<byte[]> CallTTSAPI(string text)
+    private async Task<byte[]> CallTTSAPI(string text, string voice)
     {
         var requestBody = new TTSRequest
         {
@@ -119,5 +119,14 @@ public class OpenAITTS : MonoBehaviour
         public string input;
         public string voice;
         public float speed;
+    }
+
+    public async Task<AudioClip> GetClip(string text, string voice = null)
+    {
+        // voice 파라미터 있으면 override, 없으면 Inspector 기본값 사용
+        string useVoice = string.IsNullOrEmpty(voice) ? this.voice : voice;
+        byte[] audioData = await CallTTSAPI(text, useVoice);
+        if (audioData == null || audioData.Length == 0) return null;
+        return await LoadAudioClip(audioData);
     }
 }
