@@ -13,19 +13,17 @@ public class MannequinCapturer : MonoBehaviour
     [Header("Layer Settings")]
     public LayerMask captureMask;
 
+
     bool isActive = false;
 
     public void Activate() => isActive = true;
     public void Deactivate() => isActive = false;
 
-    void Update()
+    private void OnMouseDown()
     {
         if (!isActive) return;
-        if (!Input.GetMouseButtonDown(0)) return;
-
-        Ray ray = captureCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.gameObject == gameObject)
-            CaptureToFile();
+        MannequinManager.Instance.MannequinDeactivate();
+        MannequinManager.Instance.checkReal.SetActive(true);
     }
 
     public Texture2D Capture()

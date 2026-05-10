@@ -2,8 +2,15 @@ using UnityEngine;
 
 public class Exiter : MonoBehaviour
 {
-    private void OnMouseDown()
+    public bool isActive = false;
+
+    public void Activate() => isActive = true;
+    public void Deactivate() => isActive = false;
+
+
+private void OnMouseDown()
     {
+        if (!isActive) return;
         MannequinManager.Instance.MannequinExit();
     }
 }

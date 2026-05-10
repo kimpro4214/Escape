@@ -10,11 +10,15 @@ public class DrawManager : MonoBehaviour, IInteractable
 
     [Header("파괴 파티클")]
     public GameObject destroyParticle;
+
+    [Header("Check Real")]
+    public GameObject checkReal;
     
     private Camera playerCamera;
     private GameObject playerOjbect;
 
-    public DrawSystem uiDrawer;
+    public DrawSystem drawSystem;
+    public DrawCapturer drawCapturer;
 
     public bool canInteract = true;
 
@@ -36,6 +40,7 @@ public class DrawManager : MonoBehaviour, IInteractable
             Debug.LogWarning("[DrawManager] PlayerMovement를 가진 오브젝트를 찾지 못했습니다.");
         }
         drawCamera.gameObject.SetActive(false);
+        checkReal.SetActive(false);
     }
     public void OnInteract()
     {
@@ -46,6 +51,9 @@ public class DrawManager : MonoBehaviour, IInteractable
 
     private void EnterDrawingMode()
     {
+        DrawButtonController.Instance.ActivateButtons();
+        if (drawSystem != null) drawSystem.Activate();
+
         drawCamera.gameObject.SetActive(true);
         isDrawingMode = true;
         playerOjbect.SetActive(false);
@@ -58,14 +66,15 @@ public class DrawManager : MonoBehaviour, IInteractable
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        if (uiDrawer != null) uiDrawer.Activate();
-
         Debug.Log("그림 그리기 모드 진입");
     }
 
     // 나중에 그림그리기 모드에서 나올 때 부르는 함수
     public void ExitDrawingMode()
     {
+        if (drawSystem != null) drawSystem.Deactivate();
+        DrawButtonController.Instance.DeactivateButtons();
+        if (!isDrawingMode) return;
         isDrawingMode = false;
         playerOjbect.SetActive(true);
         drawCamera.gameObject.SetActive(false);
@@ -78,7 +87,6 @@ public class DrawManager : MonoBehaviour, IInteractable
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        if (uiDrawer != null) uiDrawer.Deactivate();
 
         Debug.Log("그림 그리기 모드 종료");
     }
@@ -86,16 +94,37 @@ public class DrawManager : MonoBehaviour, IInteractable
     public void DrawDestroy()
     {
         if (isDrawingMode) ExitDrawingMode();
+        drawSystem.ResetDrawing();
         Destroy(Instantiate(destroyParticle, transform.position, transform.rotation), 2f);
         transform.parent.gameObject.SetActive(false);
     }
 
     public void DrawSubmit()
     {
+        drawSystem.ResetDrawing();
         ExitDrawingMode();
         canInteract = false;
     }
 
     public void DrawEnable() => canInteract = true;
 
+    public void CheckRealSubmit()
+    {
+        checkReal.SetActive(true);
+        drawSystem.Deactivate();
+        DrawButtonController.Instance.DeactivateButtons();
+    }
+
+    public void DrawYes()
+    {
+        checkReal.SetActive(false);
+        DrawSubmit();
+    }
+
+    public void DrawNo()
+    {
+        checkReal.SetActive(false);
+        drawSystem.Activate();
+        DrawButtonController.Instance.ActivateButtons();
+    }
 }

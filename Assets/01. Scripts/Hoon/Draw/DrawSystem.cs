@@ -102,4 +102,14 @@ public class DrawSystem : MonoBehaviour
             Destroy(lastDrawnLine);
         }
     }
+
+    public void ResetDrawing()
+    {
+        while (drawnLines.Count > 0)
+        {
+            GameObject line = drawnLines.Pop();
+            if (line != null) Destroy(line);
+        }
+        currentLine = null;
+    }
 }

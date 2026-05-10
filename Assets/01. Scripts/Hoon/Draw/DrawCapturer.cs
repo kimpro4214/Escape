@@ -21,7 +21,7 @@ public class DrawCapturer : MonoBehaviour
         StartCoroutine(CaptureRoutine());
     }
 
-private IEnumerator CaptureRoutine()
+    private IEnumerator CaptureRoutine()
     {
         yield return new WaitForEndOfFrame();
 
@@ -52,6 +52,6 @@ private IEnumerator CaptureRoutine()
 
         Debug.Log($"캡처 성공 경로: {fullPath}");
 
-        DrawManager.Instance.DrawDestroy();
+        DrawManager.Instance.DrawSubmit();
     }
 }
