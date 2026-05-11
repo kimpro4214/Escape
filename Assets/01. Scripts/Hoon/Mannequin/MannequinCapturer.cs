@@ -13,26 +13,17 @@ public class MannequinCapturer : MonoBehaviour
     [Header("Layer Settings")]
     public LayerMask captureMask;
 
-    [Header("마네킹 매니저 인스턴스")]
-    MannequinManager mannequinManager;
-    bool isActive = false;
 
-    private void Awake()
-    {
-        mannequinManager = transform.parent.GetComponentInChildren<MannequinManager>();
-    }
+    bool isActive = false;
 
     public void Activate() => isActive = true;
     public void Deactivate() => isActive = false;
 
-    void Update()
+    private void OnMouseDown()
     {
         if (!isActive) return;
-        if (!Input.GetMouseButtonDown(0)) return;
-
-        Ray ray = captureCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.gameObject == gameObject)
-            CaptureToFile();
+        MannequinManager.Instance.MannequinDeactivate();
+        MannequinManager.Instance.checkReal.SetActive(true);
     }
 
     public Texture2D Capture()
@@ -78,6 +69,7 @@ public class MannequinCapturer : MonoBehaviour
         File.WriteAllBytes(path, tex.EncodeToPNG());
         Destroy(tex);
         Debug.Log($"[MannequinCapturer] 특정 레이어({captureMask.value}) 캡처 완료: {path}");
-        mannequinManager.MannequinSubmit();
+        MannequinManager.Instance.MannequinSubmit();
+        MannequinManager.Instance.MannequinDestroy();
     }
 }

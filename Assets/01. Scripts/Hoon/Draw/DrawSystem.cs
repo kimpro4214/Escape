@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIDrawer : MonoBehaviour
+public class DrawSystem : MonoBehaviour
 {
     [Header("설정")]
     public RectTransform drawArea;
@@ -101,5 +101,15 @@ public class UIDrawer : MonoBehaviour
             // 씬에서 해당 선 오브젝트를 아예 파괴해서 지움
             Destroy(lastDrawnLine);
         }
+    }
+
+    public void ResetDrawing()
+    {
+        while (drawnLines.Count > 0)
+        {
+            GameObject line = drawnLines.Pop();
+            if (line != null) Destroy(line);
+        }
+        currentLine = null;
     }
 }
