@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
+using System.Threading.Tasks;
 
 public class VoiceAIManager : MonoBehaviour
 {
@@ -8,6 +8,16 @@ public class VoiceAIManager : MonoBehaviour
     [SerializeField] private WhisperSTT whisperSTT;
     [SerializeField] private GPTService gptService;
     [SerializeField] private SupertoneTTS supertoneTTS;
+    [SerializeField] private OpenAITTS openAITTS;
+
+    [Header("TTS 설정")]
+    [SerializeField] private TTSType ttsType = TTSType.Supertone;
+
+    public enum TTSType
+    {
+        Supertone,
+        OpenAI
+    }
 
     [Header("추리 게임 시나리오 설정")]
     public List<Scenario> scenarios = new List<Scenario>();
@@ -21,46 +31,54 @@ public class VoiceAIManager : MonoBehaviour
     [SerializeField] private ChatLogManager chatLogManager;
 
     [Header("자막 UI")]
-    [SerializeField] private SubtitleManager subtitleManager;
+    [SerializeField] private SubtitleController subtitleController;
+
+    // TTS 통합 호출 메서드
+    private async Task Speak(string text)
+    {
+        switch (ttsType)
+        {
+            case TTSType.Supertone:
+                if (supertoneTTS != null)
+                    await supertoneTTS.Speak(text);
+                else
+                    Debug.LogError("SupertoneTTS가 연결되지 않았습니다.");
+                break;
+
+            case TTSType.OpenAI:
+                if (openAITTS != null)
+                    await openAITTS.Speak(text);
+                else
+                    Debug.LogError("OpenAITTS가 연결되지 않았습니다.");
+                break;
+        }
+    }
 
     private void Update()
     {
         if (isProcessing) return;
 
-        // T키 누르면 녹음 시작
-        if (Input.GetKeyDown(KeyCode.T) && !isRecording)
-        {
+        if (Input.GetKeyDown(KeyCode.V) && !isRecording)
             StartVoiceRecording();
-        }
 
-        // T키 떼면 녹음 종료
-        if (Input.GetKeyUp(KeyCode.T) && isRecording)
-        {
+        if (Input.GetKeyUp(KeyCode.V) && isRecording)
             StopVoiceRecording();
-        }
 
-        // P키 누르면 현재 문제 다시 들려주기
         if (Input.GetKeyDown(KeyCode.P))
-        {
             PlayCurrentProblemText();
-        }
     }
-
-    // --- UI 버튼에서 호출할 수 있도록 추가된 public 함수들 ---
 
     public void StartVoiceRecording()
     {
         if (isProcessing || isRecording) return;
-
         isRecording = true;
         whisperSTT.StartRecording();
-        Debug.Log("🎤 추리 시작...");
+        Debug.Log(" 추리 시작...");
     }
 
     public void StopVoiceRecording()
     {
         if (!isRecording) return;
-
         isRecording = false;
         ProcessVoiceInput();
     }
@@ -68,68 +86,59 @@ public class VoiceAIManager : MonoBehaviour
     public void PlayCurrentProblemText()
     {
         if (isProcessing) return;
-
-        
         chatLogManager.AddLog("AI", scenarios[currentScenarioIdx].openingText);
-        subtitleManager.ShowSubtitle("AI", scenarios[currentScenarioIdx].openingText);
-
-        _ = supertoneTTS.Speak(scenarios[currentScenarioIdx].openingText);
+        subtitleController.ShowSubtitle("AI", scenarios[currentScenarioIdx].openingText, 5f);
+        _ = Speak(scenarios[currentScenarioIdx].openingText);
     }
 
-    // ---------------------------------------------------------
+    // 런타임에서 TTS 전환용 (UI 버튼 등에서 호출 가능)
+    public void SetTTSType(int index)
+    {
+        ttsType = (TTSType)index;
+        Debug.Log($"TTS 변경: {ttsType}");
+    }
 
     private async void ProcessVoiceInput()
     {
         isProcessing = true;
         try
         {
-            // 1. STT 변환
             byte[] audioData = whisperSTT.StopRecordingAndGetAudio();
             string playerText = await whisperSTT.TranscribeAudio(audioData);
-            Debug.Log($"📝 플레이어: {playerText}");
+            Debug.Log($"플레이어: {playerText}");
 
             if (string.IsNullOrEmpty(playerText)) return;
 
-            // 플레이어의 음성 인식 결과를 로그에 추가!
             chatLogManager.AddLog("플레이어", playerText);
-            subtitleManager.ShowSubtitle("플레이어", playerText);
+            subtitleController.ShowSubtitle("플레이어", playerText, 5f);
 
             Scenario current = scenarios[currentScenarioIdx];
 
-            // 2. 가로채기 로직: 정답 체크
             if (playerText.Contains("정답") || playerText.Contains("답은"))
             {
                 if (playerText.Contains(current.correctAnswer))
                 {
-                    await supertoneTTS.Speak($"정답입니다! 진실을 알려드릴게요. {current.secretTruth}");
-                    currentScenarioIdx = (currentScenarioIdx + 1) % scenarios.Count; // 다음 문제로
+                    await Speak($"정답입니다! 진실을 알려드릴게요. {current.secretTruth}");
+                    currentScenarioIdx = (currentScenarioIdx + 1) % scenarios.Count;
                     currentHintIdx = 0;
                     return;
                 }
             }
 
-            // 3. 가로채기 로직: 힌트 체크
             if (playerText.Contains("힌트"))
             {
                 string hint = current.hints[currentHintIdx % current.hints.Length];
                 currentHintIdx++;
-
-                // 힌트 메시지 로그에 추가!
                 chatLogManager.AddLog("힌트", hint);
-                subtitleManager.ShowSubtitle("힌트", hint);
-
-                await supertoneTTS.Speak(hint);
+                subtitleController.ShowSubtitle("힌트", hint, 5f);
+                await Speak(hint);
                 return;
             }
 
-            // 4. 가로채기 로직에 안 걸리면 GPT에게 질문 (추리 단계)
             string gptResponse = await gptService.GetResponse(playerText, current.gptInstruction);
-
-            // GPT의 대답을 로그에 추가!
             chatLogManager.AddLog("AI", gptResponse);
-            subtitleManager.ShowSubtitle("AI", gptResponse);
-
-            await supertoneTTS.Speak(gptResponse);
+            subtitleController.ShowSubtitle("AI", gptResponse, 5f);
+            await Speak(gptResponse);
         }
         catch (System.Exception e) { Debug.LogError($"Error: {e.Message}"); }
         finally { isProcessing = false; }
