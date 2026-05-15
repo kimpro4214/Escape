@@ -10,5 +10,6 @@ public class Flow_EnableAccessToDrawMagicCircle : IFlow
     public void StartFlow()
     {
         // 마법진 그리기가 가능하도록 설정
+        DrawManager.Instance.DrawEnable();
     }
 }
