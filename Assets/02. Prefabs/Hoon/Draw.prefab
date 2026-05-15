@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2092807715777510936}
   - component: {fileID: 8044422884698954202}
   m_Layer: 0
-  m_Name: TriggerRange
+  m_Name: Draw Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -798,7 +798,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5547801586878615303}
   m_Layer: 0
-  m_Name: Draw_System
+  m_Name: Draw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1349,7 +1349,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1466424003507455731}
   - component: {fileID: 4530560824728103107}
-  - component: {fileID: 3854239950465832466}
   - component: {fileID: 3924120299442081442}
   m_Layer: 0
   m_Name: Camera_Draw
@@ -1424,14 +1423,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &3854239950465832466
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5727828360629059656}
-  m_Enabled: 1
 --- !u!114 &3924120299442081442
 MonoBehaviour:
   m_ObjectHideFlags: 0
