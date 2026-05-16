@@ -2255,6 +2255,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 863421179790640426, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: m_Name
+      value: MovableMannequin
+      objectReference: {fileID: 0}
     - target: {fileID: 2365043007255553239, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
       propertyPath: m_Material
       value: 
@@ -2263,9 +2267,33 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mannequin Movement
       objectReference: {fileID: 0}
-    - target: {fileID: 6782402770904908449, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
-      propertyPath: m_RenderPostProcessing
-      value: 1
+    - target: {fileID: 4930148388560756628, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.75336826
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930148388560756628, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.04937946
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930148388560756628, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.65573174
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930148388560756628, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.0037223604
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930148388560756628, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -4.547
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930148388560756628, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 82.208
+      objectReference: {fileID: 0}
+    - target: {fileID: 4930148388560756628, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -3.402
       objectReference: {fileID: 0}
     - target: {fileID: 7266257308870521763, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
       propertyPath: player
