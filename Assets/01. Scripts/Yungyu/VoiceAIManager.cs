@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 
 public class VoiceAIManager : MonoBehaviour
 {
+    public static VoiceAIManager Instance { get; private set; }
+
     [Header("컴포넌트 연결")]
     [SerializeField] private WhisperSTT whisperSTT;
     [SerializeField] private GPTService gptService;
@@ -26,6 +28,7 @@ public class VoiceAIManager : MonoBehaviour
 
     private bool isProcessing = false;
     private bool isRecording = false;
+    private bool isConversationEnabled = false; // 대화 활성화 여부
 
     [Header("대화 기록 UI")]
     [SerializeField] private ChatLogManager chatLogManager;
@@ -33,7 +36,40 @@ public class VoiceAIManager : MonoBehaviour
     [Header("자막 UI")]
     [SerializeField] private SubtitleController subtitleController;
 
-    // TTS 통합 호출 메서드
+    // 싱글톤
+    private void Awake()
+    {
+        // 싱글톤 초기화
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
+    // "Flow"에서 대화를 활성화할 때 호출
+    public void EnableConversation()
+    {
+        isConversationEnabled = true;
+        Debug.Log("[VoiceAIManager] 마법모자와의 대화가 활성화되었습니다. V키를 눌러 말하세요.");
+    }
+
+    // "Flow"에서 대화를 비활성화할 때 호출
+    public void DisableConversation()
+    {
+        isConversationEnabled = false;
+
+        // 녹음 중이었다면 즉시 중단
+        if (isRecording)
+        {
+            isRecording = false;
+            whisperSTT.StopRecordingAndGetAudio(); // 버퍼 클리어
+        }
+
+        Debug.Log("[VoiceAIManager] 대화가 비활성화되었습니다.");
+    }
+
     private async Task Speak(string text)
     {
         switch (ttsType)
@@ -56,6 +92,7 @@ public class VoiceAIManager : MonoBehaviour
 
     private void Update()
     {
+        if (!isConversationEnabled) return;
         if (isProcessing) return;
 
         if (Input.GetKeyDown(KeyCode.V) && !isRecording)
@@ -73,7 +110,7 @@ public class VoiceAIManager : MonoBehaviour
         if (isProcessing || isRecording) return;
         isRecording = true;
         whisperSTT.StartRecording();
-        Debug.Log(" 추리 시작...");
+        Debug.Log(" 녹음 시작...");
     }
 
     public void StopVoiceRecording()

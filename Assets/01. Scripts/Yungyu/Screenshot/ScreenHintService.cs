@@ -5,6 +5,8 @@ using System.Collections;
 
 public class ScreenHintService : MonoBehaviour
 {
+    public static ScreenHintService Instance { get; private set; }
+
     [Header("OpenAI Vision 설정")]
     [SerializeField] private ApiKeyConfig apiKeyConfig;
     [SerializeField] private string model = "gpt-5.4"; 
@@ -38,6 +40,31 @@ public class ScreenHintService : MonoBehaviour
     [Header("자막 UI")]
     [SerializeField] private SubtitleController subtitleController;
 
+    private bool isScreenShotEnabled = false; // 대화 활성화 여부
+
+    private void Awake()
+    {
+        // 싱글톤 초기화
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
+    public void EnableScreenShot()
+    {
+        isScreenShotEnabled = true;
+        Debug.Log("[ScreenHintService] 스크린샷이 활성화되었습니다.");
+    }
+
+    public void DisableScreenShot()
+    {
+        isScreenShotEnabled = false;
+        Debug.Log("[ScreenHintService] 스크린샷이 비활성화되었습니다.");
+    }
+
     private async Task Speak(string text)
     {
         switch (ttsType)
@@ -67,6 +94,8 @@ public class ScreenHintService : MonoBehaviour
 
     private void Update()
     {
+        if (!isScreenShotEnabled) return;
+
         if (Input.GetKeyDown(KeyCode.H) && !isProcessing)
             StartCoroutine(CaptureAndHint());
     }
