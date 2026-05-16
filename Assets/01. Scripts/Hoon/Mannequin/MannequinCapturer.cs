@@ -19,7 +19,7 @@ public class MannequinCapturer : MonoBehaviour
     public void Activate() => isActive = true;
     public void Deactivate() => isActive = false;
 
-    private void OnMouseDown()
+    public void OnSubmitClick()
     {
         if (!isActive) return;
         MannequinManager.Instance.MannequinDeactivate();
@@ -70,6 +70,5 @@ public class MannequinCapturer : MonoBehaviour
         Destroy(tex);
         Debug.Log($"[MannequinCapturer] 특정 레이어({captureMask.value}) 캡처 완료: {path}");
         MannequinManager.Instance.MannequinSubmit();
-        MannequinManager.Instance.MannequinDestroy();
     }
 }

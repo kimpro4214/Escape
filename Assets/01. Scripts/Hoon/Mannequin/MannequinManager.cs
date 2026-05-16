@@ -22,6 +22,9 @@ public class MannequinManager : MonoBehaviour, IInteractable
     [Header("파괴 파티클")]
     public GameObject destroyParticle;
 
+    [Header("Static Mannequin")]
+    public GameObject staticMannequin;
+
     public bool canInteract = true;
     bool isInteracting = false;
     CursorLockMode originalLockState;
@@ -105,6 +108,7 @@ public class MannequinManager : MonoBehaviour, IInteractable
         Destroy(Instantiate(destroyParticle, transform.position, transform.rotation), 2f);
         if (isInteracting) MannequinExit();
         transform.parent.gameObject.SetActive(false);
+        if (staticMannequin != null) staticMannequin.SetActive(false);
     }
     public void MannequinSubmit()
     {
@@ -141,5 +145,17 @@ public class MannequinManager : MonoBehaviour, IInteractable
                 if (playerMeshRenderers[i] != null) playerMeshRenderers[i].enabled = value;
         }
         if (playerCamera != null) playerCamera.enabled = value;
+    }
+
+    public void OnClickYes()
+    {
+        capturer.CaptureToFile();
+        checkReal.SetActive(false);
+    }
+
+    public void OnClickNo()
+    {
+        MannequinActivate();
+        checkReal.SetActive(false);
     }
 }
