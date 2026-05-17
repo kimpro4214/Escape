@@ -2500,6 +2500,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1817122673060304875, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.031090055
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817122673060304875, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.0039
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817122673060304875, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0375
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817122673060304875, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
     - target: {fileID: 2365043007255553239, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
       propertyPath: m_Material
       value: 
@@ -2507,14 +2523,6 @@ PrefabInstance:
     - target: {fileID: 4886890982270655648, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
       propertyPath: m_Name
       value: Mannequin
-      objectReference: {fileID: 0}
-    - target: {fileID: 5247483226482090240, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 1.944
-      objectReference: {fileID: 0}
-    - target: {fileID: 5247483226482090240, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0.453
       objectReference: {fileID: 0}
     - target: {fileID: 7266257308870521763, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
       propertyPath: player
@@ -2526,7 +2534,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7549675279934234888, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.663
+      value: 3.451
       objectReference: {fileID: 0}
     - target: {fileID: 7549675279934234888, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2560,9 +2568,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8992033784972396702, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
-      propertyPath: m_IsActive
-      value: 1
+    - target: {fileID: 9027431171626202336, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: savePath
+      value: Assets/04. Data/Captures/Mannequin.png
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
