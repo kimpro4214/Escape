@@ -151,13 +151,17 @@ public class VoiceAIManager : MonoBehaviour
 
             Scenario current = scenarios[currentScenarioIdx];
 
-            if (playerText.Contains("정답") || playerText.Contains("답은"))
+            if (playerText.Contains("정답") || playerText.Contains("답은")) //정답일경우 호출되는 파트
             {
                 if (playerText.Contains(current.correctAnswer))
                 {
                     await Speak($"정답입니다! 진실을 알려드릴게요. {current.secretTruth}");
                     currentScenarioIdx = (currentScenarioIdx + 1) % scenarios.Count;
                     currentHintIdx = 0;
+
+                    //first step 의 문 열기.
+                    FindAnyObjectByType<FirstRoomStep>()?.OnPuzzleSolved();
+
                     return;
                 }
             }

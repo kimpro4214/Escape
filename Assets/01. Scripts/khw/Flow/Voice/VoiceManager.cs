@@ -37,7 +37,6 @@ public class VoiceManager : MonoBehaviour
 
     // TTS
     [SerializeField] private OpenAITTS openAITTS;
-    [SerializeField] private SupertoneTTS supertoneTTS;
 
 
     private void Awake()
@@ -122,7 +121,10 @@ public class VoiceManager : MonoBehaviour
                 // 3. 자막 출력 (CharacterBase에 정의된 실제 이름을 사용하거나 함)
                 // 잠시 비활성화
                 // --------------------------------------| 꼭 다시 활성화 하기 |--------------------------
-                subtitle.ShowSubtitle(character.characterName, currentLine.subtitle, currentLine.postDelay);
+                // 오디오가 끝나고 postDelay만큼 더 보여주고 싶을 때
+                float displayTime = currentLine.clip.length + currentLine.postDelay;
+                subtitle.ShowSubtitle(character.characterName, currentLine.subtitle, displayTime);
+
 
                 // 4. 플로우 실행
                 if (currentLine.flows != null)
@@ -148,11 +150,11 @@ public class VoiceManager : MonoBehaviour
     {
         string voice = charType switch
         {
-            ESubtitleCharacters.witch => "18139042935bc2849cb6ca",
-            ESubtitleCharacters.magicHat => "709bebd6baa7cc0d9610c3",
+            ESubtitleCharacters.witch => "nova",
+            ESubtitleCharacters.magicHat => "onyx",
             _ => null
         };
-        return await supertoneTTS.GetClip(text, voice);
+        return await openAITTS.GetClip(text, voice);
     }
 }
 
