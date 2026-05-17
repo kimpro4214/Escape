@@ -4434,6 +4434,10 @@ PrefabInstance:
       propertyPath: openAITTS
       value: 
       objectReference: {fileID: 753553069}
+    - target: {fileID: 709464914369590708, guid: 8694fc1efb6a1824797522dcf6372fdc, type: 3}
+      propertyPath: supertoneTTS
+      value: 
+      objectReference: {fileID: 1345290434}
     - target: {fileID: 2033892032298359003, guid: 8694fc1efb6a1824797522dcf6372fdc, type: 3}
       propertyPath: m_Name
       value: VoiceManager
