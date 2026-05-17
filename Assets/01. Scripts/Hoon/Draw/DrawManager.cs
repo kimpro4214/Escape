@@ -20,6 +20,9 @@ public class DrawManager : MonoBehaviour, IInteractable
     
     private Camera playerCamera;
     private GameObject playerOjbect;
+    private PlayerMovement playerMovementScript;
+    private PlayerCamera playerCameraScript;
+    private MeshRenderer[] playerMeshRenderers;
 
     public DrawSystem drawSystem;
     public DrawCapturer drawCapturer;
@@ -38,6 +41,9 @@ public class DrawManager : MonoBehaviour, IInteractable
         {
             playerOjbect = player.gameObject;
             playerCamera = player.GetComponentInChildren<Camera>(true);
+            playerMovementScript = player;
+            playerCameraScript = playerOjbect.GetComponentInChildren<PlayerCamera>(true);
+            playerMeshRenderers = playerOjbect.GetComponentsInChildren<MeshRenderer>(true);
         }
         else
         {
@@ -60,11 +66,9 @@ public class DrawManager : MonoBehaviour, IInteractable
 
         drawCamera.gameObject.SetActive(true);
         isDrawingMode = true;
-        playerOjbect.SetActive(false);
 
-        // 카메라 전환
-        if (playerCamera != null) playerCamera.gameObject.SetActive(false);
-        if (drawCamera != null) drawCamera.gameObject.SetActive(true);
+        // 플레이어 비활성화 (AudioListener 유지 위해 GameObject는 끄지 않음)
+        SetPlayerComponentsEnabled(false);
 
         // 커서 보임 설정
         Cursor.lockState = CursorLockMode.None;
@@ -80,12 +84,9 @@ public class DrawManager : MonoBehaviour, IInteractable
         DrawButtonController.Instance.DeactivateButtons();
         if (!isDrawingMode) return;
         isDrawingMode = false;
-        playerOjbect.SetActive(true);
-        drawCamera.gameObject.SetActive(false);
 
-        // 카메라 전환 복구
-        if (drawCamera != null) drawCamera.gameObject.SetActive(false);
-        if (playerCamera != null) playerCamera.gameObject.SetActive(true);
+        SetPlayerComponentsEnabled(true);
+        drawCamera.gameObject.SetActive(false);
 
         // 커서 원래 상태 복구 (잠금 상태로)
         Cursor.lockState = CursorLockMode.Locked;
@@ -93,6 +94,18 @@ public class DrawManager : MonoBehaviour, IInteractable
 
 
         Debug.Log("그림 그리기 모드 종료");
+    }
+
+    private void SetPlayerComponentsEnabled(bool value)
+    {
+        if (playerMovementScript != null) playerMovementScript.enabled = value;
+        if (playerCameraScript != null) playerCameraScript.enabled = value;
+        if (playerMeshRenderers != null)
+        {
+            for (int i = 0; i < playerMeshRenderers.Length; i++)
+                if (playerMeshRenderers[i] != null) playerMeshRenderers[i].enabled = value;
+        }
+        if (playerCamera != null) playerCamera.enabled = value;
     }
 
     public void DrawDestroy()

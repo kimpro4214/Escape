@@ -5,15 +5,16 @@ using System;
 
 public class SupertoneTTS : MonoBehaviour
 {
+    public static SupertoneTTS Instance { get; private set; }
+
     [Header("Supertone 설정")]
     [SerializeField] private ApiKeyConfig apiKeyConfig;
-    [SerializeField] private string voiceId = "18139042935bc2849cb6ca"; // 슈퍼톤에서 제공하는 보이스 ID
+    [SerializeField] private string voiceId = "18139042935bc2849cb6ca"; // 인스펙터에서 설정하는 기본 보이스 ID
 
-
-    [Header("상세 설정")]
+    [Header("음 설정")]
     [SerializeField] private string language = "ko"; // 언어 (ko, en, ja)
-    [SerializeField] private string model = "sona_speech_2_flash"; // 최신 빠른 모델
-    [SerializeField] private string style = "neutral"; // 감정/말투
+    [SerializeField] private string model = "sona_speech_2_flash"; // 최신 모델 명
+    [SerializeField] private string style = "neutral"; // 스타일/감정
 
     [Header("컴포넌트")]
     [SerializeField] private AudioSource audioSource;
@@ -22,11 +23,19 @@ public class SupertoneTTS : MonoBehaviour
     {
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
+
+        // 싱글톤 초기화
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
     }
 
     public async Task Speak(string text)
     {
-        byte[] audioData = await CallSupertoneAPI(text);
+        byte[] audioData = await CallSupertoneAPI(text, voiceId);
 
         if (audioData == null || audioData.Length == 0) return;
 
@@ -40,9 +49,20 @@ public class SupertoneTTS : MonoBehaviour
         }
     }
 
-    private async Task<byte[]> CallSupertoneAPI(string text)
+    /// <summary>
+    /// voiceId를 지정해서 AudioClip만 받아오기 (VoiceManager에서 사용)
+    /// voiceId가 null이면 인스펙터 기본값 사용
+    /// </summary>
+    public async Task<AudioClip> GetClip(string text, string overrideVoiceId = null)
     {
-        // 1. 슈퍼톤 공식 문서에 맞춘 Request Body 구조
+        string useVoiceId = string.IsNullOrEmpty(overrideVoiceId) ? this.voiceId : overrideVoiceId;
+        byte[] audioData = await CallSupertoneAPI(text, useVoiceId);
+        if (audioData == null || audioData.Length == 0) return null;
+        return await LoadAudioClip(audioData);
+    }
+
+    private async Task<byte[]> CallSupertoneAPI(string text, string targetVoiceId)
+    {
         var requestBody = new SupertoneRequest
         {
             text = text,
@@ -52,7 +72,7 @@ public class SupertoneTTS : MonoBehaviour
         };
 
         string jsonBody = JsonUtility.ToJson(requestBody);
-        string url = $"https://supertoneapi.com/v1/text-to-speech/{voiceId}";
+        string url = $"https://supertoneapi.com/v1/text-to-speech/{targetVoiceId}";
 
         using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
         {

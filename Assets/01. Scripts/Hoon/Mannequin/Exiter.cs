@@ -8,7 +8,7 @@ public class Exiter : MonoBehaviour
     public void Deactivate() => isActive = false;
 
 
-private void OnMouseDown()
+    public void OnExitClick()
     {
         if (!isActive) return;
         MannequinManager.Instance.MannequinExit();
