@@ -37,6 +37,7 @@ public class VoiceManager : MonoBehaviour
 
     // TTS
     [SerializeField] private OpenAITTS openAITTS;
+    [SerializeField] private SupertoneTTS supertoneTTS;
 
 
     private void Awake()
@@ -150,11 +151,11 @@ public class VoiceManager : MonoBehaviour
     {
         string voice = charType switch
         {
-            ESubtitleCharacters.witch => "nova",
-            ESubtitleCharacters.magicHat => "onyx",
+            ESubtitleCharacters.witch => "18139042935bc2849cb6ca",
+            ESubtitleCharacters.magicHat => "709bebd6baa7cc0d9610c3",
             _ => null
         };
-        return await openAITTS.GetClip(text, voice);
+        return await supertoneTTS.GetClip(text, voice);
     }
 }
 

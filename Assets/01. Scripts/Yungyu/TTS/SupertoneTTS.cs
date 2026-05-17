@@ -5,6 +5,8 @@ using System;
 
 public class SupertoneTTS : MonoBehaviour
 {
+    public static SupertoneTTS Instance { get; private set; }
+
     [Header("Supertone 설정")]
     [SerializeField] private ApiKeyConfig apiKeyConfig;
     [SerializeField] private string voiceId = "18139042935bc2849cb6ca"; // 인스펙터에서 설정하는 기본 보이스 ID
@@ -21,6 +23,14 @@ public class SupertoneTTS : MonoBehaviour
     {
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
+
+        // 싱글톤 초기화
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
     }
 
     public async Task Speak(string text)
