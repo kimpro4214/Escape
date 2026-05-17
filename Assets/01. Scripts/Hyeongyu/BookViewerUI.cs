@@ -13,6 +13,7 @@ namespace Hyeongyu
 
         private int _currentPage;
         private bool _isOpen;
+        private int _openedFrame;
         private BookInteractable _owner;
 
         public void SetOwner(BookInteractable owner)
@@ -30,6 +31,7 @@ namespace Hyeongyu
         private void Update()
         {
             if (!_isOpen) return;
+            if (Time.frameCount <= _openedFrame + 2) return;
             if (closeAction != null && closeAction.action.WasPressedThisFrame())
                 Close();
         }
@@ -38,6 +40,7 @@ namespace Hyeongyu
         {
             _currentPage = 0;
             RefreshPages();
+            Debug.Log("[BookViewerUI] Open() called");
             StartCoroutine(FadeIn());
         }
 
@@ -74,6 +77,7 @@ namespace Hyeongyu
             canvasGroup.blocksRaycasts = true;
             canvasGroup.interactable = true;
             float t = 0f;
+            Debug.Log("[BookViewerUI] FadeIn started");
             while (t < 1f)
             {
                 t += Time.deltaTime / fadeDuration;
@@ -81,7 +85,9 @@ namespace Hyeongyu
                 yield return null;
             }
             canvasGroup.alpha = 1f;
+            _openedFrame = Time.frameCount;
             _isOpen = true;
+            Debug.Log("[BookViewerUI] FadeIn complete, _isOpen=true");
         }
 
         private IEnumerator FadeOut()
