@@ -7,7 +7,7 @@ public class MannequinCapturer : MonoBehaviour
     public Camera captureCamera;
     public int width = 1920;
     public int height = 1080;
-    public string savePath = "Assets/04. Data/Captures/Mannequin.png";
+    public string savePath = "Assets/Captures/capture.png";
 
     // 인스펙터에서 캡처할 레이어를 선택
     [Header("Layer Settings")]
@@ -65,7 +65,7 @@ public class MannequinCapturer : MonoBehaviour
         if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
             Directory.CreateDirectory(dir);
 
-        Texture2D tex = Capture(); // 마네킹 정면에서 찍은 Texture2D 파일. 여기 이후에 윤규랑 연결하면 됨.
+        Texture2D tex = Capture();
         File.WriteAllBytes(path, tex.EncodeToPNG());
         Destroy(tex);
         Debug.Log($"[MannequinCapturer] 특정 레이어({captureMask.value}) 캡처 완료: {path}");
