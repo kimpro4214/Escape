@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class MannequinManager : MonoBehaviour, IInteractable
@@ -35,6 +36,8 @@ public class MannequinManager : MonoBehaviour, IInteractable
     MeshRenderer[] playerMeshRenderers;
     Camera playerCamera;
 
+    public ThirdRoomStep thirdRoomStep;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -43,6 +46,7 @@ public class MannequinManager : MonoBehaviour, IInteractable
     void Start()
     {
         var pm = FindAnyObjectByType<PlayerMovement>();
+        thirdRoomStep = FindAnyObjectByType<ThirdRoomStep>();
         if (pm != null)
         {
             player = pm.gameObject;
@@ -81,6 +85,7 @@ public class MannequinManager : MonoBehaviour, IInteractable
     public void OnInteract()
     {
         if (!canInteract || isInteracting) return;
+        if (!ScreenHintService.Instance.isProcessing) ScreenHintService.Instance.curIndex = 1;
 
         MannequinActivate();
 
@@ -157,5 +162,13 @@ public class MannequinManager : MonoBehaviour, IInteractable
     {
         MannequinActivate();
         checkReal.SetActive(false);
+    }
+
+    // LLM에서 이미지 및 프롬프트 전달 후 답변이 돌아왔을 때 (answerText)
+    public void CheckAnswer(string answerText)
+    {
+        if (answerText == "fail") thirdRoomStep.OnPuzzleFailed();
+        else if (answerText == "pass") thirdRoomStep.OnPuzzleSolved();
+        else Debug.Log("[MannequinManager] 답변이 fail이나 pass가 아님.");
     }
 }

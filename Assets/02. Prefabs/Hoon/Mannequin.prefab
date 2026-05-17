@@ -3048,6 +3048,7 @@ MonoBehaviour:
   destroyParticle: {fileID: 2504214343621411470, guid: ff54b0d7c4c239943ba4018937ae1f56, type: 3}
   staticMannequin: {fileID: 2579400080545736864}
   canInteract: 1
+  thirdRoomStep: {fileID: 0}
 --- !u!1 &3559379902727569933
 GameObject:
   m_ObjectHideFlags: 0
@@ -3739,7 +3740,7 @@ MonoBehaviour:
   captureCamera: {fileID: 2203998907315838325}
   width: 1360
   height: 1080
-  savePath: Assets/04. Data/Captures/capture.png
+  savePath: Assets/04. Data/Captures/Capture_1.png
   captureMask:
     serializedVersion: 2
     m_Bits: 1024

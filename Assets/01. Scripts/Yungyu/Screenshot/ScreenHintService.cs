@@ -2,6 +2,7 @@
 using UnityEngine.Networking;
 using System.Threading.Tasks;
 using System.Collections;
+using System.IO;
 
 public class ScreenHintService : MonoBehaviour
 {
@@ -9,16 +10,16 @@ public class ScreenHintService : MonoBehaviour
 
     [Header("OpenAI Vision 설정")]
     [SerializeField] private ApiKeyConfig apiKeyConfig;
-    [SerializeField] private string model = "gpt-5.4"; 
+    [SerializeField] private string model = "gpt-5.4";
+
+    [Header("현재 퍼즐 인덱스")]
+    [Tooltip("0 = Draw, 1 = Mannequin")]
+    public int curIndex = 0;
 
     [Header("퍼즐 힌트 전용 프롬프트")]
     [TextArea(4, 8)]
     [SerializeField]
-    private string puzzle_Hint =
-        "당신은 방탈출 게임의 퍼즐 힌트 도우미입니다. " +
-        "지금 보이는 화면 속 퍼즐이나 단서를 분석하고, " +
-        "플레이어가 막혀있을 것 같은 부분에 대해 " +
-        "너무 직접적이지 않게 한 문장으로 힌트를 주세요.";
+    private string[] puzzle_Hint = { };
 
     [Header("TTS 설정")]
     [SerializeField] private TTSType ttsType = TTSType.Supertone;
@@ -32,7 +33,7 @@ public class ScreenHintService : MonoBehaviour
     }
 
     [Header("상태")]
-    [SerializeField] private bool isProcessing = false;
+    [SerializeField] public bool isProcessing = false;
 
     [Header("대화 기록 UI")]
     [SerializeField] private ChatLogManager chatLogManager;
@@ -106,37 +107,60 @@ public class ScreenHintService : MonoBehaviour
             StartCoroutine(CaptureAndHint());
     }
 
-    private IEnumerator CaptureAndHint()
+    public IEnumerator CaptureAndHint()
     {
         isProcessing = true;
         Debug.Log("[ScreenHintService] 화면 캡처 중...");
 
         yield return new WaitForEndOfFrame();
 
-        Texture2D screenshot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-        screenshot.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-        screenshot.Apply();
 
-        byte[] pngBytes = screenshot.EncodeToPNG();
-        Destroy(screenshot);
-        string base64Image = System.Convert.ToBase64String(pngBytes);
+        // 훈이 수정한 부분1 시작 =======================================
+        // 현재 작동중인 퍼즐에 따른 사진 경로 저장
+        string filePath = $"Assets/04. Data/Captures/Capture_{curIndex}.png";
+        string base64Image = "";
+
+        // 파일이 실제로 존재하는지 체크 후 변환 시도
+        if (File.Exists(filePath))
+        {
+            byte[] pngBytes = File.ReadAllBytes(filePath);
+            base64Image = System.Convert.ToBase64String(pngBytes);
+            Debug.Log($"[Mannequin] {curIndex}번 사진 Base64 변환 성공");
+        }
+        // 훈이 수정한 부분1 끝 =======================================
+
 
         Debug.Log("[ScreenHintService] GPT Vision 분석 중...");
 
         var visionTask = AskVision(base64Image);
+
         yield return new WaitUntil(() => visionTask.IsCompleted);
 
         string hintText = visionTask.Result;
 
-        chatLogManager.AddLog("AI", hintText);
+
+        // 훈이 수정한 부분2 시작 =======================================
+        // curIndex에 맞는 각 함수 호출. 답 확인에 대한 로직은 각 매니저가 하도록 함.
+        switch (curIndex)
+        {
+            case 0: // Draw일 때
+                DrawManager.Instance.CheckAnswer(hintText);
+                break;
+            case 1: // Mannequin일 때
+                MannequinManager.Instance.CheckAnswer(hintText);
+                break;
+        }
+        // 훈이 수정한 부분2 끝 =======================================
+
+        //chatLogManager.AddLog("AI", hintText);
         subtitleController.ShowSubtitle("AI", hintText, 5f);
 
         if (!string.IsNullOrEmpty(hintText))
         {
             Debug.Log($"[ScreenHintService] 힌트: {hintText}");
 
-            var ttsTask = Speak(hintText);
-            yield return new WaitUntil(() => ttsTask.IsCompleted);
+            //var ttsTask = Speak(hintText);
+            //yield return new WaitUntil(() => ttsTask.IsCompleted);
         }
         else
         {
@@ -153,7 +177,7 @@ public class ScreenHintService : MonoBehaviour
             ""messages"": [
                 {{
                     ""role"": ""system"",
-                    ""content"": ""{EscapeJson(puzzle_Hint)}""
+                    ""content"": ""{EscapeJson(puzzle_Hint[curIndex])}""
                 }},
                 {{
                     ""role"": ""user"",

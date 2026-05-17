@@ -52,6 +52,6 @@ public class DrawCapturer : MonoBehaviour
 
         Debug.Log($"캡처 성공 경로: {fullPath}");
 
-        DrawManager.Instance.DrawSubmit();
+        DrawManager.Instance.secondRoomStep.OnSubmitDrawing();
     }
 }
