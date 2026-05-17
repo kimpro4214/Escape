@@ -4434,6 +4434,10 @@ PrefabInstance:
       propertyPath: openAITTS
       value: 
       objectReference: {fileID: 753553069}
+    - target: {fileID: 709464914369590708, guid: 8694fc1efb6a1824797522dcf6372fdc, type: 3}
+      propertyPath: supertoneTTS
+      value: 
+      objectReference: {fileID: 1345290434}
     - target: {fileID: 2033892032298359003, guid: 8694fc1efb6a1824797522dcf6372fdc, type: 3}
       propertyPath: m_Name
       value: VoiceManager
@@ -4445,6 +4449,22 @@ PrefabInstance:
     - target: {fileID: 2914073372170340426, guid: 8694fc1efb6a1824797522dcf6372fdc, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3126523872631359184, guid: 8694fc1efb6a1824797522dcf6372fdc, type: 3}
+      propertyPath: m_margin.w
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3126523872631359184, guid: 8694fc1efb6a1824797522dcf6372fdc, type: 3}
+      propertyPath: m_margin.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3126523872631359184, guid: 8694fc1efb6a1824797522dcf6372fdc, type: 3}
+      propertyPath: m_margin.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3126523872631359184, guid: 8694fc1efb6a1824797522dcf6372fdc, type: 3}
+      propertyPath: m_margin.z
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8101447218649503479, guid: 8694fc1efb6a1824797522dcf6372fdc, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4560,12 +4580,36 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1941028433127156907, guid: 6e2047bb94fc73948b9771885acd4916, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1300
+      objectReference: {fileID: 0}
+    - target: {fileID: 1941028433127156907, guid: 6e2047bb94fc73948b9771885acd4916, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2721954630007248279, guid: 6e2047bb94fc73948b9771885acd4916, type: 3}
       propertyPath: m_Name
       value: DescriptionManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 4061348361142120965, guid: 6e2047bb94fc73948b9771885acd4916, type: 3}
+      propertyPath: m_fontSize
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 4061348361142120965, guid: 6e2047bb94fc73948b9771885acd4916, type: 3}
+      propertyPath: m_fontStyle
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4061348361142120965, guid: 6e2047bb94fc73948b9771885acd4916, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.9506519
+      objectReference: {fileID: 0}
+    - target: {fileID: 4061348361142120965, guid: 6e2047bb94fc73948b9771885acd4916, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 4061348361142120965, guid: 6e2047bb94fc73948b9771885acd4916, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278252287
       objectReference: {fileID: 0}
     - target: {fileID: 8851141638480065698, guid: 6e2047bb94fc73948b9771885acd4916, type: 3}
       propertyPath: m_SizeDelta.x
@@ -4574,6 +4618,10 @@ PrefabInstance:
     - target: {fileID: 8851141638480065698, guid: 6e2047bb94fc73948b9771885acd4916, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8851141638480065698, guid: 6e2047bb94fc73948b9771885acd4916, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -149
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
