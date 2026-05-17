@@ -65,7 +65,7 @@ public class MannequinCapturer : MonoBehaviour
         if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
             Directory.CreateDirectory(dir);
 
-        Texture2D tex = Capture();
+        Texture2D tex = Capture(); // 마네킹 정면에서 찍은 Texture2D 파일. 여기 이후에 윤규랑 연결하면 됨.
         File.WriteAllBytes(path, tex.EncodeToPNG());
         Destroy(tex);
         Debug.Log($"[MannequinCapturer] 특정 레이어({captureMask.value}) 캡처 완료: {path}");
