@@ -13,7 +13,7 @@ public class SecondRoomStep : ProgressStepBase
     {
         door ??= GetComponentInChildren<Progress_Door>();
 
-        VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.witch, "대화 능력은 확인했어. 그렇다면 그림도 그릴수 있을까? 나중에 마법진을 그려줄 조수가 필요하거든.", 0f, null));
+        VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.witch, "알아낸게 있어? 참고가 된다면 좋겠네.", 0f, null));
 
         VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.witch, "마법진을 그리려면 정보가 필요하겠지? 방 안에서 정보를 찾아서 거기에 맞는 마법진을 그려줘. 잘 그린다면 마법이 발동될거야. ", 0f, new List<IFlow>()
         {

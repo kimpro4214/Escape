@@ -56,7 +56,9 @@ public class SubtitleController : MonoBehaviour
     {
         if (subtitleText != null)
         {
-            subtitleText.text = $"{charName}\n{text}";
+            string coloredName = $"<color=#FFFF00>{charName}</color>";
+
+            subtitleText.text = $"{coloredName}\n{text}";
         }
     }
 
