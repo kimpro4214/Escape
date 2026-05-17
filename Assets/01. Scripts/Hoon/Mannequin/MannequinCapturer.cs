@@ -7,7 +7,7 @@ public class MannequinCapturer : MonoBehaviour
     public Camera captureCamera;
     public int width = 1920;
     public int height = 1080;
-    public string savePath = "Assets/Captures/capture.png";
+    public string savePath = "Assets/04. Data/Captures/Mannequin.png";
 
     // 인스펙터에서 캡처할 레이어를 선택
     [Header("Layer Settings")]

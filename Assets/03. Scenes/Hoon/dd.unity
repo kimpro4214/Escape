@@ -1164,6 +1164,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Effect_PlayerSpawn
   maxPlayTime: 8
+--- !u!114 &410141240 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6549770961535008323, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+  m_PrefabInstance: {fileID: 3970292408969936038}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a6483c70cde05e47b6ec617c7661fbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MannequinCapturer
 --- !u!4 &533160077 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4713385240917186625, guid: dd65ac8f47330684098c3ecc87139f3c, type: 3}
@@ -2504,6 +2515,10 @@ PrefabInstance:
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 836528754}
+    - target: {fileID: 2798937461307116554, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 410141240}
     - target: {fileID: 4886890982270655648, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
       propertyPath: m_Name
       value: Mannequin
@@ -2520,6 +2535,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1587200453}
+    - target: {fileID: 7266257308870521763, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: capturer
+      value: 
+      objectReference: {fileID: 410141240}
     - target: {fileID: 7549675279934234888, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
       propertyPath: m_LocalPosition.x
       value: 32.12

@@ -792,6 +792,57 @@ Transform:
   - {fileID: 5778070567101168971}
   m_Father: {fileID: 4930148388560756628}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &837350900930726888
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3834017441369258065}
+  - component: {fileID: 6549770961535008323}
+  m_Layer: 0
+  m_Name: MannequinCapturer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3834017441369258065
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837350900930726888}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7549675279934234888}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6549770961535008323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837350900930726888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a6483c70cde05e47b6ec617c7661fbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MannequinCapturer
+  captureCamera: {fileID: 2203998907315838325}
+  width: 1080
+  height: 1080
+  savePath: Assets\04. Data\Captures/Mannequin.png
+  captureMask:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!1 &863421179790640426
 GameObject:
   m_ObjectHideFlags: 0
@@ -3041,7 +3092,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MannequinManager
   mannequinCamera: {fileID: 2203998907315838325}
   poser: {fileID: 2106383401307586464}
-  capturer: {fileID: 1152092345683603151}
+  capturer: {fileID: 6549770961535008323}
   exiter: {fileID: 8556213023839641248}
   player: {fileID: 0}
   checkReal: {fileID: 6934573481850741926}
@@ -4074,6 +4125,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1111105520266037392}
+  - {fileID: 3834017441369258065}
   - {fileID: 49729062247604112}
   - {fileID: 2918348056459653658}
   - {fileID: 7274949839044178519}
@@ -6922,7 +6974,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5247483226482090240
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6939,7 +6991,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 2.412, y: 0.439}
+  m_AnchoredPosition: {x: 1.944, y: 0.453}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &240838449938549255
@@ -7341,7 +7393,6 @@ GameObject:
   - component: {fileID: 4567974296189897894}
   - component: {fileID: 4786342541719695068}
   - component: {fileID: 2798937461307116554}
-  - component: {fileID: 1152092345683603151}
   m_Layer: 0
   m_Name: Submit_Button
   m_TagString: Untagged
@@ -7451,7 +7502,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1152092345683603151}
+      - m_Target: {fileID: 6549770961535008323}
         m_TargetAssemblyTypeName: MannequinCapturer, Assembly-CSharp
         m_MethodName: OnSubmitClick
         m_Mode: 1
@@ -7463,22 +7514,3 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1152092345683603151
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9124726281385921733}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a6483c70cde05e47b6ec617c7661fbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MannequinCapturer
-  captureCamera: {fileID: 2203998907315838325}
-  width: 1920
-  height: 1080
-  savePath: Assets/Captures/capture.png
-  captureMask:
-    serializedVersion: 2
-    m_Bits: 1024
