@@ -38,9 +38,6 @@ public class ScreenHintService : MonoBehaviour
     [Header("대화 기록 UI")]
     [SerializeField] private ChatLogManager chatLogManager;
 
-    [Header("자막 UI")]
-    [SerializeField] private SubtitleController subtitleController;
-
     private bool isScreenShotEnabled = false; // 대화 활성화 여부
 
     private void Awake()
@@ -153,7 +150,6 @@ public class ScreenHintService : MonoBehaviour
         // 훈이 수정한 부분2 끝 =======================================
 
         //chatLogManager.AddLog("AI", hintText);
-        subtitleController.ShowSubtitle("AI", hintText, 5f);
 
         if (!string.IsNullOrEmpty(hintText))
         {

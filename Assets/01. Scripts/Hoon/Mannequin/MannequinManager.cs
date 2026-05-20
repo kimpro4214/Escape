@@ -155,6 +155,7 @@ public class MannequinManager : MonoBehaviour, IInteractable
     public void OnClickYes()
     {
         capturer.CaptureToFile();
+        ScreenHintService.Instance.OnHintButtonClicked();
         checkReal.SetActive(false);
     }
 
