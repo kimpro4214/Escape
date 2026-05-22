@@ -72,6 +72,7 @@ MonoBehaviour:
   drawSystem: {fileID: 5351626576501605271}
   drawCapturer: {fileID: 1765339571231754501}
   canInteract: 1
+  secondRoomStep: {fileID: 0}
 --- !u!1 &884274779348014345
 GameObject:
   m_ObjectHideFlags: 0
@@ -785,8 +786,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ImageCapturer
   puzzleCamera: {fileID: 4530560824728103107}
   drawArea: {fileID: 4282675520531323201}
-  savePath: C:\Unity_Projects\Escape\Assets\04. Data\Captures
-  fileName: Draw.png
+  savePath: Assets\04. Data\Captures
+  fileName: Capture_0.png
   resolutionScale: 5
 --- !u!1 &4752815730794505303
 GameObject:

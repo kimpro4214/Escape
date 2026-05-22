@@ -32,11 +32,15 @@ public class DrawManager : MonoBehaviour, IInteractable
 
     private bool isDrawingMode = false;
 
+
+    public SecondRoomStep secondRoomStep;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
 
-        PlayerMovement player = FindFirstObjectByType<PlayerMovement>();
+        PlayerMovement player = FindAnyObjectByType<PlayerMovement>();
+        secondRoomStep = FindAnyObjectByType<SecondRoomStep>();
         if (player != null)
         {
             playerOjbect = player.gameObject;
@@ -57,6 +61,7 @@ public class DrawManager : MonoBehaviour, IInteractable
         if (!canInteract || isDrawingMode) return;
 
         EnterDrawingMode();
+        if (!ScreenHintService.Instance.isProcessing) ScreenHintService.Instance.curIndex = 0;
     }
 
     private void EnterDrawingMode()
@@ -118,7 +123,7 @@ public class DrawManager : MonoBehaviour, IInteractable
 
     public void DrawSubmit()
     {
-        drawSystem.ResetDrawing();
+        StartCoroutine(ScreenHintService.Instance.CaptureAndHint());
         ExitDrawingMode();
         canInteract = false;
     }
@@ -146,5 +151,13 @@ public class DrawManager : MonoBehaviour, IInteractable
         checkReal.SetActive(false);
         drawSystem.Activate();
         DrawButtonController.Instance.ActivateButtons();
+    }
+
+    // LLM에서 이미지 및 프롬프트 전달 후 답변이 돌아왔을 때 (answerText)
+    public void CheckAnswer(string answerText)
+    {
+        if (answerText == "fail") secondRoomStep.OnPuzzleFailed();
+        else if (answerText == "pass") secondRoomStep.OnPuzzleSolved();
+        else Debug.Log("[DrawManager] 답변이 fail이나 pass가 아님.");
     }
 }
