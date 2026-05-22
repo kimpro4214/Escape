@@ -33,8 +33,6 @@ public class VoiceAIManager : MonoBehaviour
     [Header("대화 기록 UI")]
     [SerializeField] private ChatLogManager chatLogManager;
 
-    [Header("자막 UI")]
-    [SerializeField] private SubtitleController subtitleController;
 
     // 싱글톤
     private void Awake()
@@ -123,8 +121,7 @@ public class VoiceAIManager : MonoBehaviour
     public void PlayCurrentProblemText()
     {
         if (isProcessing) return;
-        //chatLogManager.AddLog("AI", scenarios[currentScenarioIdx].openingText);
-        //subtitleController.ShowSubtitle("AI", scenarios[currentScenarioIdx].openingText, 5f);
+        chatLogManager.AddLog("AI", scenarios[currentScenarioIdx].openingText);
         _ = Speak(scenarios[currentScenarioIdx].openingText);
     }
 
@@ -146,16 +143,13 @@ public class VoiceAIManager : MonoBehaviour
 
             if (string.IsNullOrEmpty(playerText)) return;
 
-            //chatLogManager.AddLog("플레이어", playerText);
-            //subtitleController.ShowSubtitle("플레이어", playerText, 5f);
-
             Scenario current = scenarios[currentScenarioIdx];
 
             if (playerText.Contains("정답") || playerText.Contains("답은")) //정답일경우 호출되는 파트
             {
                 if (playerText.Contains(current.correctAnswer))
                 {
-                    await Speak($"정답입니다!"); //진실을 알려드릴게요. {current.secretTruth}
+                    await Speak($"정답입니다! 진실을 알려드릴게요. {current.secretTruth}");
                     currentScenarioIdx = (currentScenarioIdx + 1) % scenarios.Count;
                     currentHintIdx = 0;
 
@@ -170,15 +164,11 @@ public class VoiceAIManager : MonoBehaviour
             {
                 string hint = current.hints[currentHintIdx % current.hints.Length];
                 currentHintIdx++;
-                //chatLogManager.AddLog("힌트", hint);
-                //subtitleController.ShowSubtitle("힌트", hint, 5f);
                 await Speak(hint);
                 return;
             }
 
             string gptResponse = await gptService.GetResponse(playerText, current.gptInstruction);
-            //chatLogManager.AddLog("AI", gptResponse);
-            //subtitleController.ShowSubtitle("AI", gptResponse, 5f);
             await Speak(gptResponse);
         }
         catch (System.Exception e) { Debug.LogError($"Error: {e.Message}"); }
