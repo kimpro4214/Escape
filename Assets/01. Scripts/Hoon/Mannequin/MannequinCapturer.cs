@@ -21,6 +21,7 @@ public class MannequinCapturer : MonoBehaviour
 
     public void OnSubmitClick()
     {
+        Debug.Log("Submit.");
         if (!isActive) return;
         MannequinManager.Instance.MannequinDeactivate();
         MannequinManager.Instance.checkReal.SetActive(true);
@@ -69,6 +70,6 @@ public class MannequinCapturer : MonoBehaviour
         File.WriteAllBytes(path, tex.EncodeToPNG());
         Destroy(tex);
         Debug.Log($"[MannequinCapturer] 특정 레이어({captureMask.value}) 캡처 완료: {path}");
-        MannequinManager.Instance.MannequinSubmit();
+        MannequinManager.Instance.thirdRoomStep.SubmitAnswer();
     }
 }
