@@ -121,7 +121,7 @@ public class VoiceAIManager : MonoBehaviour
     public void PlayCurrentProblemText()
     {
         if (isProcessing) return;
-        chatLogManager.AddLog("AI", scenarios[currentScenarioIdx].openingText);
+        //chatLogManager.AddLog("AI", scenarios[currentScenarioIdx].openingText);
         _ = Speak(scenarios[currentScenarioIdx].openingText);
     }
 
