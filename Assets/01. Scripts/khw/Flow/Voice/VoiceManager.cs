@@ -6,13 +6,14 @@ using UnityEngine;
 [System.Serializable]
 public class VoiceLine
 {
-    public VoiceLine(AudioClip clip = null, ESubtitleCharacters charType = ESubtitleCharacters.None, string texts = "", float postDelay = 0f, List<IFlow> flows = null)
+    public VoiceLine(AudioClip clip = null, ESubtitleCharacters charType = ESubtitleCharacters.None, string texts = "", float postDelay = 0f, List<IFlow> flows = null, int ttsLineIndex = -1)
     {
         this.clip = clip;
         this.characterName = charType;
         this.subtitle = texts;
         this.postDelay = postDelay;
         this.flows = flows;
+        this.ttsLineIndex = ttsLineIndex;
     }
 
     public AudioClip clip;
@@ -22,6 +23,9 @@ public class VoiceLine
     public float postDelay;
 
     public List<IFlow> flows;  //일괄 실시됨.
+
+    // TTS wav 순서 index
+    public int ttsLineIndex = -1;
 }
 
 public class VoiceManager : MonoBehaviour
@@ -106,11 +110,30 @@ public class VoiceManager : MonoBehaviour
                 // clip null이면 캐릭터별 TTS로 생성
                 if (currentLine.clip == null && !string.IsNullOrEmpty(currentLine.subtitle))
                 {
-                    Debug.Log("TTS 호출 시작");
-                    var task = GetTTSClip(currentLine.characterName, currentLine.subtitle);
-                    yield return new WaitUntil(() => task.IsCompleted);
-                    currentLine.clip = task.Result;
-                    Debug.Log($"TTS 결과 clip: {(currentLine.clip == null ? "null" : "생성됨")}");
+                    if (currentLine.ttsLineIndex >= 0)
+                    {
+                        Debug.Log(
+                            $"사전 녹음 TTS 로드: " +
+                            $"{currentLine.characterName} " +
+                            $"line_{currentLine.ttsLineIndex:000}"
+                        );
+
+                        currentLine.clip =
+                            GetPreRecordedClip(
+                                currentLine.characterName,
+                                currentLine.ttsLineIndex
+                            );
+                    }
+                    else
+                    {
+                        Debug.Log("TTS 호출 시작");
+                        var task = GetTTSClip(currentLine.characterName, currentLine.subtitle);
+                        yield return new WaitUntil(() => task.IsCompleted);
+                        currentLine.clip = task.Result;
+                        Debug.Log($"TTS 결과 clip: {(currentLine.clip == null ? "null" : "생성됨")}");
+                    }
+
+                   
                 }
 
                 if (currentLeadingSource != null)
@@ -156,6 +179,56 @@ public class VoiceManager : MonoBehaviour
             _ => null
         };
         return await supertoneTTS.GetClip(text, voice);
+    }
+
+    private readonly Dictionary<string, AudioClip>
+    clipCache = new();
+
+    private AudioClip GetPreRecordedClip(
+        ESubtitleCharacters charType,
+        int lineIndex
+    )
+    {
+        string folder = charType switch
+        {
+            ESubtitleCharacters.witch
+                => "WitchTTS",
+
+            ESubtitleCharacters.magicHat
+                => "MagichatTTS",
+
+            _ => null
+        };
+
+        if (string.IsNullOrEmpty(folder))
+            return null;
+
+        string path =
+            $"TTS/{folder}/line_{lineIndex:000}";
+
+        // 캐시 확인
+        if (clipCache.TryGetValue(
+            path,
+            out AudioClip cached))
+        {
+            return cached;
+        }
+
+        AudioClip clip =
+            Resources.Load<AudioClip>(path);
+
+        if (clip == null)
+        {
+            Debug.LogError(
+                $"TTS wav 파일 없음: {path}"
+            );
+
+            return null;
+        }
+
+        clipCache[path] = clip;
+
+        return clip;
     }
 }
 
