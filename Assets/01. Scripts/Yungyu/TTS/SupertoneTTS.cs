@@ -9,7 +9,7 @@ public class SupertoneTTS : MonoBehaviour
 
     [Header("Supertone 설정")]
     [SerializeField] private ApiKeyConfig apiKeyConfig;
-    [SerializeField] private string voiceId = "18139042935bc2849cb6ca"; // 인스펙터에서 설정하는 기본 보이스 ID
+    [SerializeField] private string voiceId = "709bebd6baa7cc0d9610c3"; // magichat
 
     [Header("음 설정")]
     [SerializeField] private string language = "ko"; // 언어 (ko, en, ja)

@@ -5,12 +5,13 @@ public class ThirdRoomStep : ProgressStepBase
 {
     public override void OnEnterProgress()
     {
-        VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.witch, "마지막 테스트야. 상황을 묘사할 수 있는지도 테스트하겠어.", 0f, null));
+        VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.witch, "마지막 테스트야. 상황을 묘사할 수 있는지도 테스트하겠어.", 0f, null, 12));
 
         VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.witch, "오른쪽 인형이 왼쪽 인형의 공격을 방패로 막는 모습을 하도록 만들어줘. 내가 직접 평가해줄게.", 0f, new List<IFlow>
         {
             new Desc_ManequinnControl()
-        }));
+        },
+        13));
     }
 
     public override void OnUpdateProgress() //나중에 비활성화
@@ -32,7 +33,8 @@ public class ThirdRoomStep : ProgressStepBase
         VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.witch, "다 됐어? 자세가 잘 잡혔나 한 번 볼까?", 0f, new List<IFlow>()
         {
             new Flow_DisableManequinnControl()
-        }));
+        },
+        14));
     }
 
     public void OnPuzzleSolved()
@@ -43,7 +45,8 @@ public class ThirdRoomStep : ProgressStepBase
 
             //이후 화면 암전.
 
-        }));
+        },
+        15));
     }
 
     public void OnPuzzleFailed()
@@ -51,7 +54,8 @@ public class ThirdRoomStep : ProgressStepBase
         VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.witch, "음, 조금 부족한 것 같은데? 더 노력해보는게 좋을거야.", 0f, new List<IFlow>
         {
             new Flow_EnableManequinnControl(),
-        }));
+        },
+        16));
     }
 }
 
