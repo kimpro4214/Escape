@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 using UnityEngine.InputSystem;
 
 namespace Hyeongyu
@@ -14,6 +15,7 @@ namespace Hyeongyu
         private int _currentPage;
         private bool _isOpen;
         private int _openedFrame;
+        private BookPageContent[] _currentBookPages;
         private BookInteractable _owner;
 
         public void SetOwner(BookInteractable owner)
@@ -38,26 +40,33 @@ namespace Hyeongyu
 
         public void Open()
         {
+            Open(null);
+        }
+
+        public void Open(BookPageContent[] bookPages)
+        {
+            _currentBookPages = bookPages;
             _currentPage = 0;
+            ApplyBookPages();
             RefreshPages();
-            Debug.Log("[BookViewerUI] Open() called");
+            Debug.Log($"[BookViewerUI] Open() called with {GetPageCount()} page(s)");
             StartCoroutine(FadeIn());
         }
 
         public void NextPage()
         {
-            if (_currentPage >= pages.Length - 1) return;
-            pages[_currentPage].SetActive(false);
+            if (_currentPage >= GetPageCount() - 1) return;
+            SetPageActive(_currentPage, false);
             _currentPage++;
-            pages[_currentPage].SetActive(true);
+            SetPageActive(_currentPage, true);
         }
 
         public void PrevPage()
         {
             if (_currentPage <= 0) return;
-            pages[_currentPage].SetActive(false);
+            SetPageActive(_currentPage, false);
             _currentPage--;
-            pages[_currentPage].SetActive(true);
+            SetPageActive(_currentPage, true);
         }
 
         private void Close()
@@ -68,8 +77,42 @@ namespace Hyeongyu
 
         private void RefreshPages()
         {
+            int pageCount = GetPageCount();
             for (int i = 0; i < pages.Length; i++)
-                pages[i].SetActive(i == 0);
+                SetPageActive(i, i == 0 && i < pageCount);
+        }
+
+        private void ApplyBookPages()
+        {
+            if (_currentBookPages == null) return;
+
+            int pageCount = Mathf.Min(_currentBookPages.Length, pages.Length);
+            for (int i = 0; i < pageCount; i++)
+            {
+                if (pages[i] == null || _currentBookPages[i] == null) continue;
+
+                TextMeshProUGUI[] texts = pages[i].GetComponentsInChildren<TextMeshProUGUI>(true);
+                foreach (TextMeshProUGUI text in texts)
+                {
+                    if (text.name == "Title")
+                        text.text = _currentBookPages[i].Title;
+                    else if (text.name == "Subtitle")
+                        text.text = _currentBookPages[i].Body;
+                }
+            }
+        }
+
+        private int GetPageCount()
+        {
+            if (pages == null || pages.Length == 0) return 0;
+            if (_currentBookPages == null || _currentBookPages.Length == 0) return pages.Length;
+            return Mathf.Min(_currentBookPages.Length, pages.Length);
+        }
+
+        private void SetPageActive(int pageIndex, bool active)
+        {
+            if (pages == null || pageIndex < 0 || pageIndex >= pages.Length || pages[pageIndex] == null) return;
+            pages[pageIndex].SetActive(active);
         }
 
         private IEnumerator FadeIn()

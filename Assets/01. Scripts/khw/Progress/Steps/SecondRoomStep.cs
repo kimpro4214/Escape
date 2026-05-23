@@ -50,6 +50,7 @@ public class SecondRoomStep : ProgressStepBase
     public void OnInfoFound() //정보 찾을때마다 호출
     {
         countOfFoundInfo++;
+        Debug.Log($"[SecondRoomStep] OnInfoFound() 호출 횟수: {countOfFoundInfo}");
 
         switch(countOfFoundInfo)
         {
