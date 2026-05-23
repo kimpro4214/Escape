@@ -6,7 +6,7 @@ namespace Hyeongyu
     {
         public static ClueManager Instance { get; private set; }
 
-        [SerializeField] private int totalClues = 2;
+        [SerializeField] private int totalClues = 3;
 
         private int _foundCount;
 

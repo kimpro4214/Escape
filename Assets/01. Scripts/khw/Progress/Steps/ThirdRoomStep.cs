@@ -29,7 +29,10 @@ public class ThirdRoomStep : ProgressStepBase
 
     public void SubmitAnswer() // 플레이어가 답안을 제출했을 때 호출되는 메서드
     {
-        new Flow_DisableManequinnControl().StartFlow();
+        VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.witch, "다 됐어? 자세가 잘 잡혔나 한 번 볼까?", 0f, new List<IFlow>()
+        {
+            new Flow_DisableManequinnControl()
+        }));
     }
 
     public void OnPuzzleSolved()

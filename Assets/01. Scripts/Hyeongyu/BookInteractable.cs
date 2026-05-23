@@ -13,15 +13,13 @@ namespace Hyeongyu
 
         private Vector3 _originalPosition;
         private bool _isAnimating;
-
-        private void Start()
-        {
-            bookViewerUI?.SetOwner(this);
-        }
+        private bool _isFound;
 
         public void OnInteract()
         {
             if (_isAnimating) return;
+            Debug.Log($"[BookInteractable] OnInteract: {name}");
+            bookViewerUI?.SetOwner(this);
             _isAnimating = true;
             playerMovement.enabled = false;
             playerCamera.enabled = false;
@@ -33,7 +31,9 @@ namespace Hyeongyu
         public void OnBookViewerClosed()
         {
             StartCoroutine(CloseBookSequence());
-            ClueManager.Instance?.OnClueFound();
+            if (_isFound) return;
+            _isFound = true;
+            FindFirstObjectByType<SecondRoomStep>()?.OnInfoFound();
         }
 
         private IEnumerator OpenBookSequence()
@@ -41,7 +41,13 @@ namespace Hyeongyu
             _originalPosition = transform.position;
             yield return FloatTo(transform.position + Vector3.up * floatHeight, floatDuration);
             yield return new WaitForSeconds(0.2f);
-            bookViewerUI.Open();
+            if (bookViewerUI != null)
+                bookViewerUI.Open();
+            else
+            {
+                Debug.LogError($"[BookInteractable] bookViewerUI is null on {name}, restoring player");
+                StartCoroutine(CloseBookSequence());
+            }
         }
 
         private IEnumerator CloseBookSequence()
