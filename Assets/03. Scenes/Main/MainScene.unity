@@ -1631,22 +1631,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 833408719}
     m_Modifications:
-    - target: {fileID: 2468162546552921780, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: m_UiScaleMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2468162546552921780, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: m_MatchWidthOrHeight
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2468162546552921780, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: m_ReferenceResolution.x
-      value: 1920
-      objectReference: {fileID: 0}
-    - target: {fileID: 2468162546552921780, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: m_ReferenceResolution.y
-      value: 1080
-      objectReference: {fileID: 0}
     - target: {fileID: 4752815730794505303, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
       propertyPath: m_Name
       value: Draw_System
@@ -1689,10 +1673,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5547801586878615303, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5727828360629059656, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -4675,7 +4655,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5381547771011656215, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8992033784972396702, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
