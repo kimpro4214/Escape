@@ -30,6 +30,8 @@ public class FirstRoomStep : ProgressStepBase
             new Desc_RequestPlayerQuestionToMagic(), //보이스를 재생하는 동시에 플레이어가 마법 모자에게 질문하도록 요청하는 설명을 표시함.
         },
         3));
+
+        VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.magicHat, "안녕~ 반가워 문제를 내줄께 사막에서 길을 잃은 탐험가가 모래 위에 놓인 깨끗한 '이것'을 발견했습니다. 하지만 그는 그것을 보자마자 절망하며 그 자리에 주저앉아 울기 시작했습니다. 왜일까?", 0f, null, 0));
     }
 
     public override void OnUpdateProgress() //나중에 비활성화
