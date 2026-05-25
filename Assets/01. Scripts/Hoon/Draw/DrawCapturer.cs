@@ -5,7 +5,6 @@ public class DrawCapturer : MonoBehaviour
 {
     [Header("연결")]
     public Camera puzzleCamera;
-    public RectTransform drawArea;
 
     [Header("저장 설정")]
     public string savePath = "Assets/04. Data/Captures/Capture_0.png";
