@@ -15,8 +15,8 @@ public class DrawManager : MonoBehaviour, IInteractable
     [Header("Check Real")]
     public GameObject checkReal;
 
-    [Header("마법진 판정")]
-    [SerializeField] private MagicCircleJudger magicCircleJudger;
+    //[Header("마법진 판정")]
+    //[SerializeField] private MagicCircleJudger magicCircleJudger;
     
     private Camera playerCamera;
     private GameObject playerOjbect;
@@ -140,10 +140,8 @@ public class DrawManager : MonoBehaviour, IInteractable
     public void DrawYes()
     {
         checkReal.SetActive(false);
-        if (magicCircleJudger != null)
-            magicCircleJudger.CaptureAndJudge();
-        else
-            DrawSubmit();
+        if (drawCapturer != null) drawCapturer.CaptureAndSave();
+        DrawSubmit();
     }
 
     public void DrawNo()
