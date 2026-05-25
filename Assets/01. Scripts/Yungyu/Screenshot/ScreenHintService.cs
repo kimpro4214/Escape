@@ -122,7 +122,7 @@ public class ScreenHintService : MonoBehaviour
         {
             byte[] pngBytes = File.ReadAllBytes(filePath);
             base64Image = System.Convert.ToBase64String(pngBytes);
-            Debug.Log($"[Mannequin] {curIndex}번 사진 Base64 변환 성공");
+            Debug.Log($"{curIndex}번 사진 Base64 변환 성공");
         }
         // 훈이 수정한 부분1 끝 =======================================
 

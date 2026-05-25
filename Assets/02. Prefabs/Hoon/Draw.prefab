@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3663770610768003582}
   - component: {fileID: 2092807715777510936}
   - component: {fileID: 8044422884698954202}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Draw Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,7 +69,6 @@ MonoBehaviour:
   drawCamera: {fileID: 4530560824728103107}
   destroyParticle: {fileID: 2504214343621411470, guid: ff54b0d7c4c239943ba4018937ae1f56, type: 3}
   checkReal: {fileID: 2859807335198129565}
-  magicCircleJudger: {fileID: 0}
   drawSystem: {fileID: 5351626576501605271}
   drawCapturer: {fileID: 1765339571231754501}
   canInteract: 1
@@ -85,7 +84,7 @@ GameObject:
   - component: {fileID: 6040656518240751728}
   - component: {fileID: 1990529967605010002}
   - component: {fileID: 7437607928660888903}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -222,7 +221,7 @@ GameObject:
   - component: {fileID: 4282675520531323201}
   - component: {fileID: 1170739667563329995}
   - component: {fileID: 1930679495589210380}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: DrawRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -298,7 +297,7 @@ GameObject:
   - component: {fileID: 1594978895110894646}
   - component: {fileID: 1877227046115756248}
   - component: {fileID: 7807607454594698724}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Exit_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -428,7 +427,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2709932363945922516}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: CheckReal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -468,7 +467,7 @@ GameObject:
   - component: {fileID: 1690280474132824695}
   - component: {fileID: 7994462130314094106}
   - component: {fileID: 5209804711551395404}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Submit?
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -544,7 +543,7 @@ GameObject:
   - component: {fileID: 1304444986009541316}
   - component: {fileID: 3859695726007900173}
   - component: {fileID: 8151501860268962397}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -680,7 +679,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3089137900949830198}
   - component: {fileID: 5382268555537037912}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: DrawButtonController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -734,7 +733,7 @@ GameObject:
   - component: {fileID: 8354656068124298659}
   - component: {fileID: 5351626576501605271}
   - component: {fileID: 1765339571231754501}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Drawer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -787,9 +786,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ImageCapturer
   puzzleCamera: {fileID: 4530560824728103107}
   drawArea: {fileID: 4282675520531323201}
-  savePath: Assets\04. Data\Captures
-  fileName: Capture_0.png
-  resolutionScale: 5
+  savePath: Assets/04. Data/Captures/Capture_0.png
+  captureWidth: 1080
+  captureHeight: 720
+  backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+  captureLayers:
+    serializedVersion: 2
+    m_Bits: 2048
+  antiAliasing: 4
 --- !u!1 &4752815730794505303
 GameObject:
   m_ObjectHideFlags: 0
@@ -799,7 +803,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5547801586878615303}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Draw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -837,7 +841,7 @@ GameObject:
   - component: {fileID: 1842340949853661492}
   - component: {fileID: 6861861535919375924}
   - component: {fileID: 79948560705205908}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -975,7 +979,7 @@ GameObject:
   - component: {fileID: 5850241403093350403}
   - component: {fileID: 2468162546552921780}
   - component: {fileID: 795301081314910748}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Canvas_Draw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1084,7 +1088,7 @@ GameObject:
   - component: {fileID: 4754802400590329764}
   - component: {fileID: 1990581464880016130}
   - component: {fileID: 1505564064037106405}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Reset_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1216,7 +1220,7 @@ GameObject:
   - component: {fileID: 1280620114536318349}
   - component: {fileID: 8945494762353180633}
   - component: {fileID: 7943536843481426123}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1353,7 +1357,7 @@ GameObject:
   - component: {fileID: 1466424003507455731}
   - component: {fileID: 4530560824728103107}
   - component: {fileID: 3924120299442081442}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Camera_Draw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1482,7 +1486,7 @@ GameObject:
   - component: {fileID: 7449789647748349863}
   - component: {fileID: 6048880642556859924}
   - component: {fileID: 1478713262512072144}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Undo_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1615,7 +1619,7 @@ GameObject:
   - component: {fileID: 4094202052379108656}
   - component: {fileID: 5600461310603424479}
   - component: {fileID: 38300704826942861}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Yes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1747,7 +1751,7 @@ GameObject:
   - component: {fileID: 223469479314589592}
   - component: {fileID: 791333296721960485}
   - component: {fileID: 2178303743471303470}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1884,7 +1888,7 @@ GameObject:
   - component: {fileID: 4034886188373464887}
   - component: {fileID: 5151972784886809002}
   - component: {fileID: 6218093296725948409}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Visual_A4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1972,7 +1976,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 697643342072829055}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: A4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2006,7 +2010,7 @@ GameObject:
   - component: {fileID: 4926578638342322719}
   - component: {fileID: 3186178612836520726}
   - component: {fileID: 591980353421544165}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2144,7 +2148,7 @@ GameObject:
   - component: {fileID: 5860601900672355320}
   - component: {fileID: 7739360394535164720}
   - component: {fileID: 6413639637962314326}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Submit_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2276,7 +2280,7 @@ GameObject:
   - component: {fileID: 5579825635653255614}
   - component: {fileID: 6101840074433546583}
   - component: {fileID: 3578916686993923257}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2414,7 +2418,7 @@ GameObject:
   - component: {fileID: 7992844058299094897}
   - component: {fileID: 2136383079944801295}
   - component: {fileID: 1470883279664759983}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: No
   m_TagString: Untagged
   m_Icon: {fileID: 0}
