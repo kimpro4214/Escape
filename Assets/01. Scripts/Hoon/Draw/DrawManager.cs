@@ -141,7 +141,6 @@ public class DrawManager : MonoBehaviour, IInteractable
     {
         checkReal.SetActive(false);
         if (drawCapturer != null) drawCapturer.CaptureAndSave();
-        DrawSubmit();
     }
 
     public void DrawNo()
