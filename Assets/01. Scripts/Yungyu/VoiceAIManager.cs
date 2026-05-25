@@ -11,6 +11,7 @@ public class VoiceAIManager : MonoBehaviour
     [SerializeField] private GPTService gptService;
     [SerializeField] private SupertoneTTS supertoneTTS;
     [SerializeField] private OpenAITTS openAITTS;
+    [SerializeField] private SubtitleController subtitle;
 
     [Header("TTS 설정")]
     [SerializeField] private TTSType ttsType = TTSType.Supertone;
@@ -44,7 +45,10 @@ public class VoiceAIManager : MonoBehaviour
             return;
         }
         Instance = this;
+
+        if (subtitle == null) subtitle = FindAnyObjectByType<SubtitleController>();
     }
+
 
     // "Flow"에서 대화를 활성화할 때 호출
     public void EnableConversation()
@@ -149,7 +153,8 @@ public class VoiceAIManager : MonoBehaviour
             {
                 if (playerText.Contains(current.correctAnswer))
                 {
-                    await Speak($"정답입니다! 진실을 알려드릴게요. {current.secretTruth}");
+                    await Speak($"정답입니다!");
+                    subtitle.ShowSubtitle("MagicHat", "정답입니다.", 1f);
                     currentScenarioIdx = (currentScenarioIdx + 1) % scenarios.Count;
                     currentHintIdx = 0;
 
@@ -169,6 +174,7 @@ public class VoiceAIManager : MonoBehaviour
             }
 
             string gptResponse = await gptService.GetResponse(playerText, current.gptInstruction);
+            subtitle.ShowSubtitle("MagicHat", gptResponse, 3f);
             await Speak(gptResponse);
         }
         catch (System.Exception e) { Debug.LogError($"Error: {e.Message}"); }
