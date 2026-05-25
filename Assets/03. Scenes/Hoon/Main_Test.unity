@@ -1647,18 +1647,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
-    - target: {fileID: 1765339571231754501, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: captureWidth
-      value: 1080
-      objectReference: {fileID: 0}
-    - target: {fileID: 1765339571231754501, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: captureHeight
-      value: 720
-      objectReference: {fileID: 0}
-    - target: {fileID: 1765339571231754501, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: captureLayers.m_Bits
-      value: 2048
-      objectReference: {fileID: 0}
     - target: {fileID: 2859807335198129565, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
       propertyPath: m_Layer
       value: 11
@@ -2201,7 +2189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c5bd067874089845898d73cfd7cc779, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpenAITTS
-  apiKeyConfig: {fileID: 11400000, guid: c76214bb9feeeff4cb090d537863f888, type: 2}
+  apiKeyConfig: {fileID: 11400000, guid: fe229a26b6bc2624f99efc80467266d4, type: 2}
   model: tts-1
   voice: nova
   speed: 1
@@ -2265,7 +2253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5c0feae55a4c14448c9f8726ad58f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WhisperSTT
-  apiKeyConfig: {fileID: 11400000, guid: c76214bb9feeeff4cb090d537863f888, type: 2}
+  apiKeyConfig: {fileID: 11400000, guid: fe229a26b6bc2624f99efc80467266d4, type: 2}
   sampleRate: 16000
   maxRecordingSeconds: 30
 --- !u!1 &811645848
@@ -2715,7 +2703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02001b733315b9a41b56ea839e9705c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScreenHintService
-  apiKeyConfig: {fileID: 11400000, guid: c76214bb9feeeff4cb090d537863f888, type: 2}
+  apiKeyConfig: {fileID: 11400000, guid: fe229a26b6bc2624f99efc80467266d4, type: 2}
   model: gpt-5.4
   curIndex: 0
   puzzle_Hint:
@@ -4204,7 +4192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd319fdb905d03146ba56bba3f9cfa9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SupertoneTTS
-  apiKeyConfig: {fileID: 11400000, guid: c76214bb9feeeff4cb090d537863f888, type: 2}
+  apiKeyConfig: {fileID: 11400000, guid: fe229a26b6bc2624f99efc80467266d4, type: 2}
   voiceId: 18139042935bc2849cb6ca
   language: ko
   model: sona_speech_2_flash
@@ -4819,7 +4807,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48ba51b919e7c874e863c407ee0e98b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GPTService
-  apiKeyConfig: {fileID: 11400000, guid: c76214bb9feeeff4cb090d537863f888, type: 2}
+  apiKeyConfig: {fileID: 11400000, guid: fe229a26b6bc2624f99efc80467266d4, type: 2}
   model: gpt-4o-mini
 --- !u!1 &1648920642
 GameObject:
@@ -5195,7 +5183,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1886351329138181437, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 24.19
+      value: 24.07
       objectReference: {fileID: 0}
     - target: {fileID: 1886351329138181437, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
       propertyPath: m_LocalPosition.y
