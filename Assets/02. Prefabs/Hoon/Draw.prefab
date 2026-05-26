@@ -69,6 +69,8 @@ MonoBehaviour:
   drawCamera: {fileID: 4530560824728103107}
   destroyParticle: {fileID: 2504214343621411470, guid: ff54b0d7c4c239943ba4018937ae1f56, type: 3}
   checkReal: {fileID: 2859807335198129565}
+  transitionDuration: 0.8
+  transitionEase: 7
   drawSystem: {fileID: 5351626576501605271}
   drawCapturer: {fileID: 1765339571231754501}
   canInteract: 1
@@ -785,7 +787,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ImageCapturer
   puzzleCamera: {fileID: 4530560824728103107}
-  drawArea: {fileID: 4282675520531323201}
   savePath: Assets/04. Data/Captures/Capture_0.png
   captureWidth: 1080
   captureHeight: 720
