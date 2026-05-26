@@ -38,7 +38,16 @@ public class GPTService : MonoBehaviour
 
             if (request.result != UnityWebRequest.Result.Success) return "통신 오류가 발생했어.";
 
+            Debug.Log($"GPT 응답 원문: {request.downloadHandler.text}"); // 추가
+
             var response = JsonUtility.FromJson<GPTResponse>(request.downloadHandler.text);
+
+            if (response == null || response.choices == null || response.choices.Length == 0)
+            {
+                Debug.LogError("파싱 실패!");
+                return "응답 파싱 실패";
+            }
+
             return response.choices[0].message.content.Trim();
         }
     }
