@@ -564,7 +564,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &124189895
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2889,7 +2889,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &967996660
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5073,8 +5073,6 @@ MonoBehaviour:
   canvasGroup: {fileID: 1714737840}
   pages:
   - {fileID: 814698845}
-  - {fileID: 1753736351}
-  - {fileID: 811645848}
   closeAction: {fileID: -4391006077404598838, guid: 9c7702c28f07f6b4a916f32082319652, type: 3}
   fadeDuration: 0.3
 --- !u!224 &1714737839

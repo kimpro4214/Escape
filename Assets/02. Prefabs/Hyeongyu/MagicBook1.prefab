@@ -128,8 +128,8 @@ MonoBehaviour:
   bookViewerUI: {fileID: 0}
   playerMovement: {fileID: 0}
   pages:
-  - title: "\uB208"
-    body: "\uAC00\uC6B4\uB370 \uB208\uC744 \uADF8\uB824\uB77C"
+  - title: ""
+    body: "\uB9C8\uBC95\uC9C4 \uAC00\uC6B4\uB370\uC5D0\uB294 \uB208\uC774 \uC788\uB2E4."
   playerCamera: {fileID: 0}
   floatHeight: 0.3
   floatDuration: 0.6
