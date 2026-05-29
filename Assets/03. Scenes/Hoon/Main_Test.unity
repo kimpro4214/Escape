@@ -1108,22 +1108,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 833408719}
     m_Modifications:
-    - target: {fileID: 2468162546552921780, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: m_UiScaleMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2468162546552921780, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: m_MatchWidthOrHeight
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2468162546552921780, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: m_ReferenceResolution.x
-      value: 1920
-      objectReference: {fileID: 0}
-    - target: {fileID: 2468162546552921780, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: m_ReferenceResolution.y
-      value: 1080
-      objectReference: {fileID: 0}
     - target: {fileID: 4752815730794505303, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
       propertyPath: m_Name
       value: Draw_System
@@ -1166,10 +1150,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5547801586878615303, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5727828360629059656, guid: 0284c14d68a770b439fa7a1b56d3b2fd, type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1590,7 +1570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c5bd067874089845898d73cfd7cc779, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpenAITTS
-  apiKeyConfig: {fileID: 11400000, guid: 321d393313b124d45bc96faaae819a82, type: 2}
+  apiKeyConfig: {fileID: 0}
   model: tts-1
   voice: nova
   speed: 1
@@ -1654,7 +1634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5c0feae55a4c14448c9f8726ad58f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WhisperSTT
-  apiKeyConfig: {fileID: 11400000, guid: 321d393313b124d45bc96faaae819a82, type: 2}
+  apiKeyConfig: {fileID: 0}
   sampleRate: 16000
   maxRecordingSeconds: 30
 --- !u!1 &833408718
@@ -1813,7 +1793,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02001b733315b9a41b56ea839e9705c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScreenHintService
-  apiKeyConfig: {fileID: 11400000, guid: 321d393313b124d45bc96faaae819a82, type: 2}
+  apiKeyConfig: {fileID: 0}
   model: gpt-5.4
   curIndex: 0
   puzzle_Hint:
@@ -2735,7 +2715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd319fdb905d03146ba56bba3f9cfa9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SupertoneTTS
-  apiKeyConfig: {fileID: 11400000, guid: 321d393313b124d45bc96faaae819a82, type: 2}
+  apiKeyConfig: {fileID: 0}
   voiceId: 709bebd6baa7cc0d9610c3
   language: ko
   model: sona_speech_2_flash
@@ -3166,29 +3146,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 833408719}
     m_Modifications:
-    - target: {fileID: 2789247376661227715, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4886890982270655648, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
       propertyPath: m_Name
       value: Mannequin Movement
       objectReference: {fileID: 0}
-    - target: {fileID: 6228735406325006272, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -915.40015
-      objectReference: {fileID: 0}
-    - target: {fileID: 6228735406325006272, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 15.259964
-      objectReference: {fileID: 0}
-    - target: {fileID: 7516474910251685666, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -915.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7516474910251685666, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 15.26
+    - target: {fileID: 7266257308870521763, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+      propertyPath: transitionDuration
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7549675279934234888, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3231,8 +3195,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 5381547771011656215, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8992033784972396702, guid: 3bc8c56ab8439b24aa1579e1cdf57c56, type: 3}
@@ -3288,7 +3251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48ba51b919e7c874e863c407ee0e98b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GPTService
-  apiKeyConfig: {fileID: 11400000, guid: 321d393313b124d45bc96faaae819a82, type: 2}
+  apiKeyConfig: {fileID: 0}
   model: gpt-4o-mini
 --- !u!1 &1648920642
 GameObject:
@@ -3379,7 +3342,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1886351329138181437, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 13
+      value: 24.44
       objectReference: {fileID: 0}
     - target: {fileID: 1886351329138181437, guid: cc7f1b4b1b9f4714895125547bc673f7, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4702,7 +4665,7 @@ PrefabInstance:
     - target: {fileID: 1900945598413244876, guid: ebefecf147b48c6449c22d0e97900f8e, type: 3}
       propertyPath: currentProgress
       value: 
-      objectReference: {fileID: 1955569539}
+      objectReference: {fileID: 305384303}
     - target: {fileID: 4870560408031700103, guid: ebefecf147b48c6449c22d0e97900f8e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
