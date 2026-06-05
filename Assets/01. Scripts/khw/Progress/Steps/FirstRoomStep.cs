@@ -21,7 +21,10 @@ public class FirstRoomStep : ProgressStepBase
     {
         door ??= GetComponentInChildren<Progress_Door>();
 
-        VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.witch, "앞의 모자가 보여? 네가 하는 질문에 대답해줄 모자야. 모자가 내는 수수께끼를 풀어보도록 해.", 0f, null, 2));
+        VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.witch, "앞의 모자가 보여? 네가 하는 질문에 대답해줄 모자야. 모자가 내는 수수께끼를 풀어보도록 해.", 0f, new List<IFlow>()
+        {
+            new Flow_PlayMagicHatIdleAnim()
+        }, 2));
 
         VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.witch, "질문에는 예, 아니요로만 답변해줄테니까 질문을 잘 선택하는게 좋을거야.", 0f, new List<IFlow>()
         {
@@ -31,7 +34,12 @@ public class FirstRoomStep : ProgressStepBase
         },
         3));
 
-        VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.magicHat, "안녕~ 반가워 문제를 내줄께 사막에서 길을 잃은 탐험가가 모래 위에 놓인 깨끗한 '이것'을 발견했습니다. 하지만 그는 그것을 보자마자 절망하며 그 자리에 주저앉아 울기 시작했습니다. 왜일까?", 0f, null, 0));
+        VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.magicHat, "안녕~ 반가워 문제를 내줄께 사막에서 길을 잃은 탐험가가 모래 위에 놓인 깨끗한 '이것'을 발견했습니다. 하지만 그는 그것을 보자마자 절망하며 그 자리에 주저앉아 울기 시작했습니다. 왜일까?", 0f, new List<IFlow> { 
+            new Flow_PlayMagicHatTalk01Anim(),
+            new Flow_PlayMagicHatTalk02Anim(),
+            new Flow_PlayMagicHatTalk01Anim()
+        },
+        0));
     }
 
     public override void OnUpdateProgress() //나중에 비활성화
@@ -53,13 +61,16 @@ public class FirstRoomStep : ProgressStepBase
     {
         VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.magicHat, "맞았어. 문을 열어줄테니까 다음 테스트를 받도록 해.", 0f, new List<IFlow> {
             new Flow_DisableConverationWithMagicHat(), //보이스를 재생하는 동시에 대화 AI를 사용할 수 없게 함.
-            new Flow_DoorOpen(door) //보이스를 재생하는 동시에 문을 여는 플로우를 실행함.
-        },
-        1));
+            new Flow_DoorOpen(door)
+        } //보이스를 재생하는 동시에 문을 여는 플로우를 실행함.
+        ,1));
     }
 
     public void OnPuzzleFailed() //퍼즐이 실패했을 때 호출
     {
-        VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.magicHat, "다시 생각해봐, 그래선 마녀님의 조수가 될 수 없어.", 0f, null, 2));
+        VoiceManager.Instance.AddVoice(new VoiceLine(null, ESubtitleCharacters.magicHat, "다시 생각해봐, 그래선 마녀님의 조수가 될 수 없어.", 0f, new List<IFlow>
+        {
+            new Flow_PlayMagicHatTalk02Anim()
+        }, 2));
     }
 }

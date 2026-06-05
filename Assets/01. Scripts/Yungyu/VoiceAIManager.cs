@@ -153,8 +153,6 @@ public class VoiceAIManager : MonoBehaviour
             {
                 if (playerText.Contains(current.correctAnswer))
                 {
-                    await Speak($"정답입니다!");
-                    subtitle.ShowSubtitle("MagicHat", "정답입니다.", 1f);
                     currentScenarioIdx = (currentScenarioIdx + 1) % scenarios.Count;
                     currentHintIdx = 0;
 

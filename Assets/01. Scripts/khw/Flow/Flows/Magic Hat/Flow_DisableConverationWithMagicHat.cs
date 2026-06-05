@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class Flow_DisableConverationWithMagicHat : IFlow
 {
+    public Flow_DisableConverationWithMagicHat()
+    {
+    }
+
     public void EndFlow()
     {
 
